@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: women-safety-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: women_safety_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: women-safety-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/women_safety_db?schema=public
+      NODE_ENV: production
+    depends_on:
+      - postgres
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+
+volumes:
+  postgres_data:

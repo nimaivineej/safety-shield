@@ -1,0 +1,8 @@
+{
+  "appId": "com.safetyshield.app",
+  "appName": "Safety Shield",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true
+  }
+}

@@ -1,0 +1,280 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  VOLUNTEER
+  AUTHORITY
+  ADMIN
+}
+
+enum AlertStatus {
+  ACTIVE
+  CANCELLED
+  RESOLVED
+}
+
+enum IncidentType {
+  HARASSMENT
+  ACCIDENT
+  THEFT
+  UNSAFE_AREA
+  OTHER
+}
+
+enum IncidentStatus {
+  PENDING
+  INVESTIGATING
+  RESOLVED
+  CLOSED
+}
+
+enum NotificationType {
+  SOS_ALERT
+  INCIDENT_UPDATE
+  VOLUNTEER_RESPONSE
+  SYSTEM
+}
+
+enum ServiceType {
+  HOSPITAL
+  POLICE_STATION
+  INSURANCE_AGENT
+  AMBULANCE
+}
+
+model User {
+  id                String             @id @default(uuid())
+  email             String             @unique
+  password          String
+  name              String
+  phone             String?
+  role              UserRole           @default(USER)
+  isVerified        Boolean            @default(false)
+  verificationToken String?
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  
+  // Relations
+  emergencyContacts EmergencyContact[]
+  sosAlerts         SOSAlert[]
+  incidentReports   IncidentReport[]
+  locations         Location[]
+  notifications     Notification[]
+  supportTickets    SupportTicket[]
+  volunteer         Volunteer?
+  authority         Authority?
+  
+  @@index([email])
+}
+
+model EmergencyContact {
+  id           String   @id @default(uuid())
+  userId       String
+  name         String
+  phone        String
+  email        String?
+  relationship String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+}
+
+model SOSAlert {
+  id          String      @id @default(uuid())
+  userId      String
+  locationId  String?
+  status      AlertStatus @default(ACTIVE)
+  triggeredAt DateTime    @default(now())
+  resolvedAt  DateTime?
+  notes       String?
+  
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location Location? @relation(fields: [locationId], references: [id])
+  
+  @@index([userId])
+  @@index([status])
+  @@index([triggeredAt])
+}
+
+model IncidentReport {
+  id          String         @id @default(uuid())
+  userId      String
+  locationId  String?
+  type        IncidentType
+  description String
+  photoUrls    String[]       @default([])
+  voiceNoteUrl String?
+  status       IncidentStatus @default(PENDING)
+  assignedTo  String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location          Location?           @relation(fields: [locationId], references: [id])
+  volunteerResponses VolunteerResponse[]
+  
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  userId    String?
+  latitude  Float
+  longitude Float
+  address   String?
+  createdAt DateTime @default(now())
+  
+  user            User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sosAlerts       SOSAlert[]
+  incidentReports IncidentReport[]
+  
+  @@index([userId])
+  @@index([latitude, longitude])
+}
+
+model SafeZone {
+  id          String   @id @default(uuid())
+  name        String
+  latitude    Float
+  longitude   Float
+  radius      Float    @default(500) // in meters
+  description String?
+  reportedBy  String?
+  createdAt   DateTime @default(now())
+  
+  @@index([latitude, longitude])
+}
+
+model RiskZone {
+  id          String   @id @default(uuid())
+  name        String
+  latitude    Float
+  longitude   Float
+  radius      Float    @default(500) // in meters
+  riskLevel   String   @default("MEDIUM") // LOW, MEDIUM, HIGH
+  description String?
+  reportedBy  String?
+  createdAt   DateTime @default(now())
+  
+  @@index([latitude, longitude])
+}
+
+model Volunteer {
+  id               String    @id @default(uuid())
+  userId           String    @unique
+  isVerified       Boolean   @default(false)
+  isAvailable      Boolean   @default(true)
+  rating           Float     @default(0)
+  totalResponses   Int       @default(0)
+  verificationDocs String[]  @default([])
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  responses VolunteerResponse[]
+  
+  @@index([userId])
+  @@index([isAvailable])
+}
+
+model VolunteerResponse {
+  id               String    @id @default(uuid())
+  volunteerId      String
+  incidentId       String
+  status           String    @default("ACCEPTED") // ACCEPTED, IN_PROGRESS, COMPLETED
+  acceptedAt       DateTime  @default(now())
+  completedAt      DateTime?
+  notes            String?
+  
+  volunteer Volunteer      @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  incident  IncidentReport @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  
+  @@index([volunteerId])
+  @@index([incidentId])
+}
+
+model Authority {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  badgeNumber  String   @unique
+  department   String
+  jurisdiction String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([badgeNumber])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  createdAt DateTime         @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model Service {
+  id        String      @id @default(uuid())
+  type      ServiceType
+  name      String
+  phone     String
+  email     String?
+  latitude  Float?
+  longitude Float?
+  address   String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([type])
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model SupportTicket {
+  id          String       @id @default(uuid())
+  userId      String
+  message     String       @db.Text
+  status      TicketStatus @default(OPEN)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
