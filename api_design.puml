@@ -1,0 +1,84 @@
+@startuml
+!theme plain
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 8
+}
+skinparam package {
+    BackgroundColor transparent
+    BorderColor DarkBlue
+    FontColor DarkBlue
+    FontSize 14
+    FontStyle bold
+}
+skinparam database {
+    BackgroundColor White
+    BorderColor Black
+}
+skinparam actor {
+    BackgroundColor White
+    BorderColor Black
+}
+
+title "API Design - Safety Shield System"
+
+left to right direction
+
+actor "User" as user
+actor "Volunteer" as volunteer
+actor "Authority" as admin
+
+package "1. Frontend Layer" {
+  rectangle "Mobile & Web App\n(React / Capacitor)" as app
+}
+
+package "2. API Gateway & Interfaces Layer" {
+  rectangle "Notification API\n(SMS/Email)" as notif_api
+  rectangle "Incident Report API\n(REST Endpoint)" as incident_api
+  rectangle "Authentication API\n(JWT & OTP)" as auth_api
+  rectangle "SOS Alert Flow\n(WebSockets & REST)" as sos_api
+  rectangle "Location Tracking API\n(WebSockets)" as loc_api
+}
+
+package "3. Application Logic Layer" {
+  rectangle "Alert & SOS Controller" as alert_ctrl
+  rectangle "Volunteer Management Service" as vol_mgmt
+  rectangle "Live Location Service" as loc_svc
+}
+
+package "4. Data Persistence Layer" {
+  database "PostgreSQL\n(Incident Records)" as inc_db
+  database "PostgreSQL\n(User & Authority Profiles)" as user_db
+  database "Redis / In-Memory\n(Live Location State)" as redis
+}
+
+' Actor connections
+user --> app
+volunteer --> app
+admin --> app
+
+' App to APIs
+app --> notif_api
+app --> incident_api
+app --> auth_api
+app --> sos_api
+app --> loc_api
+
+' APIs passing requests to Business Logic
+incident_api --> alert_ctrl : Process Report
+sos_api --> alert_ctrl : Trigger Emergency Flow
+auth_api --> user_db : Validate Credentials
+
+' Application Logic resolving actions
+alert_ctrl --> vol_mgmt : Find Nearby Volunteers
+alert_ctrl --> notif_api : Trigger Alerts (Twilio/Email)
+alert_ctrl --> inc_db : Record Alert in DB
+
+loc_api --> loc_svc
+loc_svc --> redis : Update Live GPS (Socket.io)
+loc_svc --> user_db : Save Final Tracking Route
+
+vol_mgmt --> user_db : Fetch Volunteer Data
+
+@enduml

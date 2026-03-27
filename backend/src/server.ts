@@ -94,7 +94,7 @@ if (!fs.existsSync(logsDir)) {
 }
 
 // Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (_req: Request, res: Response) => {
     res.json({
         success: true,
         message: 'Server is running',
@@ -116,7 +116,7 @@ app.use('/api/support', supportRoutes);
 app.use('/api/services', servicesRoutes);
 
 // API documentation (Swagger) - placeholder
-app.get('/api-docs', (req: Request, res: Response) => {
+app.get('/api-docs', (_req: Request, res: Response) => {
     res.json({
         message: 'API Documentation',
         version: '1.0.0',
@@ -205,6 +205,8 @@ process.on('SIGINT', async () => {
 });
 
 // Start the server
-startServer();
+if (process.env.NODE_ENV !== 'test') {
+    startServer();
+}
 
 export default app;

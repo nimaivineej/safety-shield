@@ -1,0 +1,51 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/validation.test.ts
+PASS src/__tests__/inte
+gration.test.ts
+  ΓùÅ Console
+
+    console.log
+      [32minfo[39m: 
+≡ƒôª Serving React app 
+from D:\OneDrive\Deskto
+p\Women Safety 
+Monitoring App\dist {"t
+imestamp":"2026-03-27 
+09:18:46"}
+
+      at Console.log (n
+ode_modules/winston/lib
+/winston/transports/con
+sole.js:87:23)
+
+
+Test Suites: 3 passed, 
+3 total
+Tests:       19 
+passed, 19 total
+Snapshots:   0 total
+Time:        5.214 s
+Ran all test suites.

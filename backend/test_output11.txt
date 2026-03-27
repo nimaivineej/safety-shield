@@ -1,0 +1,67 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/validation.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/services/u
+ser.service.ts[0m:[93
+m75[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS2552: [0mCannot 
+find name 'settings'. 
+Did you mean 
+'_settings'?
+
+    [7m75[0m         
+return settings;
+    [7m  [0m [91m   
+            
+~~~~~~~~[0m
+
+      [96msrc/services
+/user.service.ts[0m:[
+93m73[0m:[93m47[0m
+        [7m73[0m     
+async updateUserSetting
+s(_userId: string, 
+_settings: any): 
+Promise<any> {
+        [7m  [0m 
+[96m                  
+                       
+     ~~~~~~~~~~~~~~[0m
+        '_settings' is 
+declared here.
+
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        5.193 s
+Ran all test suites.

@@ -70,8 +70,8 @@ export class UserService {
         };
     }
 
-    async updateUserSettings(userId: string, settings: any): Promise<any> {
+    async updateUserSettings(_userId: string, _settings: any): Promise<any> {
         // Placeholder for settings update
-        return settings;
+        return _settings;
     }
 }

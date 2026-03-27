@@ -1,0 +1,85 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/validation.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/services/n
+otification.service.ts
+[0m:[93m209[0m:[93m1
+5[0m - 
+[91merror[0m[90m 
+TS6133: [0m'mapsLink' 
+is declared but its 
+value is never read.
+
+    [7m209[0m        
+ const mapsLink = `http
+s://www.google.com/maps
+?q=${incidentId}`; // 
+simplified placeholder 
+if coords aren't passed
+    [7m   [0m [91m  
+            
+~~~~~~~~[0m
+    [96msrc/services/n
+otification.service.ts
+[0m:[93m238[0m:[93m9
+[0m - 
+[91merror[0m[90m 
+TS6133: 
+[0m'incidentId' is 
+declared but its value 
+is never read.
+
+    [7m238[0m        
+ incidentId: string,
+    [7m   [0m [91m  
+      ~~~~~~~~~~[0m
+    [96msrc/services/n
+otification.service.ts
+[0m:[93m322[0m:[93m9
+[0m - 
+[91merror[0m[90m 
+TS6133: [0m'location' 
+is declared but its 
+value is never read.
+
+    [7m322[0m        
+ location: { latitude: 
+number; longitude: 
+number },
+    [7m   [0m [91m  
+      ~~~~~~~~[0m
+
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        5.23 s
+Ran all test suites.

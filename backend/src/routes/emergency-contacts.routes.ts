@@ -19,7 +19,7 @@ router.get('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
             data: contacts,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -35,14 +35,14 @@ router.post('/', async (req: AuthRequest, res: Response, next: NextFunction) => 
             data: contact,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Update emergency contact
 router.put('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const contact = await contactService.updateContact(req.params.id, req.user!.id, req.body);
+        const contact = await contactService.updateContact(req.params.id as string, req.user!.id, req.body);
 
         res.json({
             success: true,
@@ -50,21 +50,21 @@ router.put('/:id', async (req: AuthRequest, res: Response, next: NextFunction) =
             data: contact,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Delete emergency contact
 router.delete('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        await contactService.deleteContact(req.params.id, req.user!.id);
+        await contactService.deleteContact(req.params.id as string, req.user!.id);
 
         res.json({
             success: true,
             message: 'Emergency contact deleted successfully',
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

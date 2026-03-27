@@ -1,0 +1,95 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/validation
+.test.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/...idation.test.    
+ts:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/errors.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/middleware
+/upload.ts[0m:[93m14
+[0m:[93m19[0m - 
+[91merror[0m[90m 
+TS6133: [0m'req' is 
+declared but its value 
+is never read.
+
+    [7m14[0m     
+destination: (req, 
+file, cb) => {
+    [7m  [0m [91m   
+               ~~~[0m
+    [96msrc/middleware
+/upload.ts[0m:[93m14
+[0m:[93m24[0m - 
+[91merror[0m[90m 
+TS6133: [0m'file' is 
+declared but its value 
+is never read.
+
+    [7m14[0m     
+destination: (req, 
+file, cb) => {
+    [7m  [0m [91m   
+                    
+~~~~[0m
+    [96msrc/middleware
+/upload.ts[0m:[93m17
+[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS6133: [0m'req' is 
+declared but its value 
+is never read.
+
+    [7m17[0m     
+filename: (req, file, 
+cb) => {
+    [7m  [0m [91m   
+            ~~~[0m
+    [96msrc/middleware
+/upload.ts[0m:[93m24
+[0m:[93m21[0m - 
+[91merror[0m[90m 
+TS6133: [0m'req' is 
+declared but its value 
+is never read.
+
+    [7m24[0m const 
+fileFilter = (req: 
+any, file: 
+Express.Multer.File, 
+cb: multer.FileFilterCa
+llback) => {
+    [7m  [0m [91m   
+                 
+~~~[0m
+
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        4.677 s
+Ran all test suites.

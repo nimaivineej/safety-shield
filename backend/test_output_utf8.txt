@@ -1,0 +1,34 @@
+﻿node.exe : ΓùÅ 
+Validation Error:
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (ΓùÅ Validatio   
+ n Error::String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+
+  Directory D:\OneDrive
+\Desktop\Women Safety 
+Monitoring 
+App\backend\tests in 
+the roots[1] option 
+was not found.
+
+  Configuration 
+Documentation:
+  https://jestjs.io/doc
+s/configuration
+

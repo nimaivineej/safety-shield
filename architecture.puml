@@ -1,0 +1,75 @@
+@startuml
+!theme plain
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 10
+}
+skinparam package {
+    BackgroundColor transparent
+    BorderColor DarkBlue
+    FontColor DarkBlue
+    FontSize 14
+    FontStyle bold
+}
+skinparam arrow {
+    Color #333333
+    Thickness 1.5
+}
+skinparam database {
+    BackgroundColor White
+    BorderColor Black
+}
+skinparam queue {
+    BackgroundColor White
+    BorderColor Black
+}
+
+title "Safety Shield - Application Architecture"
+
+package "1. Frontend Layer (Client Application)" {
+  rectangle "UI Components\n(React 18, Tailwind CSS, Radix UI)" as UI
+  rectangle "App Router\n(React Router DOM - Protected Routes)" as Router
+  rectangle "Network & Geolocation Clients\n(Axios, Socket.io, Capacitor API)" as Client
+  
+  UI --> Router : View Changes
+  Router --> Client : Trigger API/Socket Events
+}
+
+queue "HTTPS REST API / WSS WebSockets (JSON)" as Network #E8E8E8
+
+package "2. Backend Layer (Application Server)" {
+  rectangle "API Gateway & Security\n(Express.js, Helmet, CORS, Rate Limiter)" as Server
+  rectangle "Auth & Middleware\n(JWT, Bcrypt, Zod Schema Validation)" as Auth
+  
+  rectangle "Core Business Logic & Controllers" as Controllers {
+      rectangle "SOS & Live Location Service\n(Socket.io Broadcaster)" as Track
+      rectangle "Incident Reporting Service\n(CRUD Operations)" as Report
+  }
+  
+  rectangle "Media Upload Processor\n(Multer Multipart/Form-Data)" as Media
+  rectangle "External Notifications\n(Twilio SMS, Nodemailer)" as Services
+  
+  Server --> Auth : Validate Income Requests
+  Auth --> Controllers : Authenticated Flow
+  
+  Report --> Media : Extract Evidence
+  Controllers --> Services : Trigger Emergency Alerts
+}
+
+package "3. Data Layer (Persistence)" {
+  database "Relational Database\n(PostgreSQL via Prisma ORM)" as DB
+  database "Real-Time State\n(Active Socket Sessions / Redis)" as Temp
+  database "File Storage\n(Local Disk / Optional S3)" as Storage
+}
+
+Client --> Network : Bi-directional Comm
+Network --> Server : API Endpoint Routing
+
+Media --> Storage : Save Evidence (Images/Audio/Video)
+Track --> Temp : Continuously Update GPS Coordinates
+Auth --> DB : Verify Users credentials
+Report --> DB : Persist Incident Records
+Controllers --> DB : Manage Emergency Contacts
+
+@enduml

@@ -26,7 +26,7 @@ export const supportController = {
     }
   },
 
-  getAllTickets: async (req: Request, res: Response): Promise<void> => {
+  getAllTickets: async (_req: Request, res: Response): Promise<void> => {
     try {
       const tickets = await supportService.getAllTickets();
       res.status(200).json({ success: true, data: tickets });

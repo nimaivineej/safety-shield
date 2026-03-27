@@ -248,7 +248,7 @@ export class AuthService {
 
     private generateAccessToken(user: User): string {
         const secret = process.env.JWT_ACCESS_SECRET!;
-        const expiry = process.env.JWT_ACCESS_EXPIRY || '15m';
+        const expiry = (process.env.JWT_ACCESS_EXPIRY || '15m') as any;
 
         return jwt.sign(
             {
@@ -263,7 +263,7 @@ export class AuthService {
 
     private generateRefreshToken(user: User): string {
         const secret = process.env.JWT_REFRESH_SECRET!;
-        const expiry = process.env.JWT_REFRESH_EXPIRY || '7d';
+        const expiry = (process.env.JWT_REFRESH_EXPIRY || '7d') as any;
 
         return jwt.sign(
             {

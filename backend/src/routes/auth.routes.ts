@@ -25,7 +25,7 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
             data: result,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -49,7 +49,7 @@ router.post('/register/volunteer', async (req: Request, res: Response, next: Nex
             data: result,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -73,7 +73,7 @@ router.post('/register/authority', async (req: Request, res: Response, next: Nex
             data: result,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -89,7 +89,7 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
             data: result,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -107,12 +107,12 @@ router.post('/refresh', async (req: Request, res: Response, next: NextFunction) 
 
         const result = await authService.refreshAccessToken(refreshToken);
 
-        res.json({
+        return res.json({
             success: true,
             data: result,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -130,12 +130,12 @@ router.post('/verify-email', async (req: Request, res: Response, next: NextFunct
 
         await authService.verifyEmail(token);
 
-        res.json({
+        return res.json({
             success: true,
             message: 'Email verified successfully',
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -160,12 +160,12 @@ router.post('/forgot-password', async (req: Request, res: Response, next: NextFu
                 .catch((error) => logger.error('Failed to send reset email:', error));
         }
 
-        res.json({
+        return res.json({
             success: true,
             message: 'If the email exists, a reset link has been sent',
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -183,12 +183,12 @@ router.post('/reset-password', async (req: Request, res: Response, next: NextFun
 
         await authService.resetPassword(token, password);
 
-        res.json({
+        return res.json({
             success: true,
             message: 'Password reset successful',
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

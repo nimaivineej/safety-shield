@@ -1,0 +1,76 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/validation.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/routes/not
+ification.routes.ts[0m
+:[93m28[0m:[93m22[0
+m - 
+[91merror[0m[90m 
+TS2322: [0mType 
+'string | string[]' is 
+not assignable to type 
+'string | StringFilter<
+"Notification"> | 
+undefined'.
+      Type 'string[]' 
+is not assignable to 
+type 'string | StringFi
+lter<"Notification"> | 
+undefined'.
+
+    [7m28[0m         
+    where: { id: 
+req.params.id, userId: 
+req.user!.id },
+    [7m  [0m [91m   
+                  
+~~[0m
+
+A worker process has 
+failed to exit 
+gracefully and has 
+been force exited. 
+This is likely caused 
+by tests leaking due 
+to improper teardown. 
+Try running with 
+--detectOpenHandles to 
+find leaks. Active 
+timers can also cause 
+this, ensure that 
+.unref() was called on 
+them.
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        5.199 s
+Ran all test suites.

@@ -18,7 +18,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
         });
         res.json({ success: true, data: services });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

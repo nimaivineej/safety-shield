@@ -1,0 +1,123 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/validation.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/routes/sos
+.routes.ts[0m:[93m45
+[0m:[93m53[0m - 
+[91merror[0m[90m 
+TS2345: [0mArgument 
+of type 'string | 
+string[]' is not 
+assignable to 
+parameter of type 
+'string'.
+      Type 'string[]' 
+is not assignable to 
+type 'string'.
+
+    [7m45[0m         
+const alert = await sos
+Service.getAlertById(re
+q.params.id, 
+req.user!.id);
+    [7m  [0m [91m   
+                       
+                       
+   ~~~~~~~~~~~~~[0m
+    [96msrc/routes/sos
+.routes.ts[0m:[93m59
+[0m:[93m52[0m - 
+[91merror[0m[90m 
+TS2345: [0mArgument 
+of type 'string | 
+string[]' is not 
+assignable to 
+parameter of type 
+'string'.
+      Type 'string[]' 
+is not assignable to 
+type 'string'.
+
+    [7m59[0m         
+const alert = await sos
+Service.cancelAlert(req
+.params.id, 
+req.user!.id);
+    [7m  [0m [91m   
+                       
+                       
+  ~~~~~~~~~~~~~[0m
+    [96msrc/routes/sos
+.routes.ts[0m:[93m75
+[0m:[93m12[0m - 
+[91merror[0m[90m 
+TS6133: [0m'req' is 
+declared but its value 
+is never read.
+
+    [7m75[0m     
+async (req: 
+AuthRequest, res: 
+Response, next: 
+NextFunction) => {
+    [7m  [0m [91m   
+        ~~~[0m
+    [96msrc/routes/sos
+.routes.ts[0m:[93m96
+[0m:[93m57[0m - 
+[91merror[0m[90m 
+TS2345: [0mArgument 
+of type 'string | 
+string[]' is not 
+assignable to 
+parameter of type 
+'string'.
+      Type 'string[]' 
+is not assignable to 
+type 'string'.
+
+    [7m96[0m         
+    const alert = 
+await sosService.resolv
+eAlert(req.params.id, 
+notes);
+    [7m  [0m [91m   
+                       
+                       
+       
+~~~~~~~~~~~~~[0m
+
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        4.883 s
+Ran all test suites.

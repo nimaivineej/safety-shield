@@ -33,8 +33,8 @@ export class VolunteerService {
     }
 
     async getNearbyIncidents(
-        volunteerId: string,
-        radiusKm: number = 10
+        _volunteerId: string,
+        _radiusKm: number = 10
     ): Promise<IncidentReport[]> {
         // In a real app, you'd use geospatial queries
         // For now, return all pending incidents

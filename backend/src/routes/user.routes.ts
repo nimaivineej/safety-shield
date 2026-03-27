@@ -19,7 +19,7 @@ router.get('/profile', async (req: AuthRequest, res: Response, next: NextFunctio
             data: user,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -35,7 +35,7 @@ router.put('/profile', async (req: AuthRequest, res: Response, next: NextFunctio
             data: user,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -50,7 +50,7 @@ router.put('/location', async (req: AuthRequest, res: Response, next: NextFuncti
             message: 'Location updated successfully',
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -64,7 +64,7 @@ router.get('/settings', async (req: AuthRequest, res: Response, next: NextFuncti
             data: settings,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -79,7 +79,7 @@ router.put('/settings', async (req: AuthRequest, res: Response, next: NextFuncti
             data: settings,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

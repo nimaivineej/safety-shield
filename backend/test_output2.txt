@@ -1,0 +1,57 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+FAIL src/utils/__tests_
+_/validation.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/utils/__te
+sts__/validation.test.t
+s[0m:[93m1[0m:[93m3
+9[0m - 
+[91merror[0m[90m 
+TS6133: [0m'emergencyC
+ontactSchema' is 
+declared but its value 
+is never read.
+
+    [7m1[0m import { 
+registerSchema, 
+loginSchema, emergencyC
+ontactSchema, 
+sosAlertSchema, 
+validate } from 
+'../validation';
+    [7m [0m [91m    
+                       
+           ~~~~~~~~~~~~
+~~~~~~~~~~[0m
+
+Test Suites: 1 failed, 
+1 passed, 2 total
+Tests:       6 passed, 
+6 total
+Snapshots:   0 total
+Time:        3.049 s
+Ran all test suites.

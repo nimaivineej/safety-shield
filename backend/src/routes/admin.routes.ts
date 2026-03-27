@@ -27,7 +27,7 @@ router.get('/stats', async (_req: Request, res: Response, next: NextFunction) =>
             data: { totalUsers, totalVolunteers, totalIncidents, totalSOS, activeAlerts, resolvedAlerts },
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -61,7 +61,7 @@ router.get('/users', async (req: Request, res: Response, next: NextFunction) => 
 
         res.json({ success: true, data: { users, total, page, pages: Math.ceil(total / limit) } });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -78,7 +78,7 @@ router.get('/sos-alerts', async (_req: Request, res: Response, next: NextFunctio
         });
         res.json({ success: true, data: alerts });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -95,7 +95,7 @@ router.get('/incidents', async (_req: Request, res: Response, next: NextFunction
         });
         res.json({ success: true, data: incidents });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -107,7 +107,7 @@ router.delete('/users/:id', async (req: Request, res: Response, next: NextFuncti
         logger.info(`Admin deleted user ${id}`);
         res.json({ success: true, message: 'User deleted' });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -121,7 +121,7 @@ router.patch('/sos-alerts/:id/resolve', async (req: Request, res: Response, next
         });
         res.json({ success: true, data: alert });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -137,7 +137,7 @@ router.get('/services', async (req: Request, res: Response, next: NextFunction) 
         });
         res.json({ success: true, data: services });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -163,7 +163,7 @@ router.post('/services', async (req: Request, res: Response, next: NextFunction)
         logger.info(`Admin created service: ${name} (${type})`);
         res.status(201).json({ success: true, data: service });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -186,7 +186,7 @@ router.put('/services/:id', async (req: Request, res: Response, next: NextFuncti
         });
         res.json({ success: true, data: service });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -198,7 +198,7 @@ router.delete('/services/:id', async (req: Request, res: Response, next: NextFun
         logger.info(`Admin deleted service ${id}`);
         res.json({ success: true, message: 'Service deleted' });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

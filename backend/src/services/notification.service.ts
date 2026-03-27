@@ -42,10 +42,15 @@ export class NotificationService {
             return;
         }
 
-        // Fast2SMS expects 10-digit Indian numbers (strip +91 or 91 prefix)
-        const number = to.replace(/^\+91|^91/, '').replace(/\D/g, '');
+        // Fast2SMS expects 10-digit Indian numbers (strip +91 prefix only if number is 12 digits)
+        const digits = to.replace(/\D/g, '');
+        const number = digits.length === 12 && digits.startsWith('91')
+            ? digits.slice(2)   // strip country code
+            : digits.length === 10
+            ? digits            // already 10-digit
+            : to.replace(/^\+91/, '').replace(/\D/g, ''); // fallback: strip +91 then non-digits
         if (number.length !== 10) {
-            logger.warn(`Skipping SMS – invalid number format: ${to}`);
+            logger.warn(`Skipping SMS – invalid number format: ${to} (resolved: ${number})`);
             return;
         }
 
@@ -189,7 +194,7 @@ export class NotificationService {
         userId: string,
         type: string,
         locationText: string,
-        incidentId: string
+        _incidentId: string
     ): Promise<void> {
         // Get user details with emergency contacts
         const user = await prisma.user.findUnique({
@@ -201,7 +206,7 @@ export class NotificationService {
 
         if (!user || user.emergencyContacts.length === 0) return;
 
-        const mapsLink = `https://www.google.com/maps?q=${incidentId}`; // simplified placeholder if coords aren't passed
+        // const mapsLink = `https://www.google.com/maps?q=${incidentId}`; // simplified placeholder if coords aren't passed
         const time = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
         const smsMessage =
@@ -230,7 +235,7 @@ export class NotificationService {
     }
 
     async sendIncidentReportNotification(
-        incidentId: string,
+        _incidentId: string,
         type: string,
         location: string
     ): Promise<void> {
@@ -314,7 +319,7 @@ export class NotificationService {
     }
 
     private async notifyNearbyVolunteers(
-        location: { latitude: number; longitude: number },
+        _location: { latitude: number; longitude: number },
         userName: string
     ): Promise<void> {
         // Get available volunteers (simplified - in production, use geospatial queries)

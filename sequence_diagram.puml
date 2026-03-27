@@ -1,0 +1,82 @@
+@startuml
+!theme plain
+
+' Style Settings
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+skinparam sequence {
+    ArrowColor #34495E
+    LifeLineBorderColor #2C3E50
+    ParticipantBackgroundColor White
+    ParticipantBorderColor #2C3E50
+}
+
+title Safety Shield - SOS Alert & Volunteer Response Sequence
+
+actor "User (Victim)" as Victim
+participant "Mobile App" as App
+participant "Backend Server" as Server
+database "PostgreSQL (Prisma)" as DB
+participant "Messaging Service" as Msg
+actor "Volunteer" as Volunteer
+
+== SOS Initiation ==
+
+Victim -> App: Trigger SOS Button
+activate App
+App -> App: Capture Location & Audio
+App -> Server: Socket.io: "sos:trigger" (location, media)
+activate Server
+
+Server -> DB: Create Incident Record (PENDING)
+activate DB
+DB --> Server: Incident Created
+deactivate DB
+
+Server -> Msg: Send Emergency SMS/Email to Contacts
+activate Msg
+Msg --> Server: Success
+deactivate Msg
+
+== Broadcast & Acceptance ==
+
+Server -> Volunteer: Socket.io: "sos:broadcast" (alert data)
+activate Volunteer
+Volunteer -> Volunteer: View Alert on Map
+Volunteer -> Volunteer: Click "Accept Incident"
+
+Volunteer -> Server: Socket.io: "sos:accept" (incidentId)
+Server -> DB: Update Incident (IN_PROGRESS, volunteerId)
+activate DB
+DB --> Server: Updated
+deactivate DB
+
+Server -> App: Socket.io: "sos:volunteer_found" (volunteer details)
+App -> Victim: Show "Volunteer is En Route"
+deactivate App
+
+== Real-time Tracking ==
+
+loop Every 5 Seconds
+    Victim -> App: Updated Location
+    App -> Server: Socket.io: "location:update"
+    Server -> Volunteer: Socket.io: "location:relay"
+    Volunteer -> Volunteer: Update Victim Marker on Map
+end
+
+== Resolution ==
+
+Volunteer -> Victim: Arrives at Location & Secures Area
+Victim -> App: Click "I am Safe"
+App -> Server: Socket.io: "sos:resolve"
+Server -> DB: Update Incident (RESOLVED)
+activate DB
+DB --> Server: Success
+deactivate DB
+
+Server -> Volunteer: Socket.io: "sos:resolved_all"
+deactivate Volunteer
+Server -> App: Confirmation Message
+deactivate Server
+
+@enduml

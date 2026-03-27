@@ -1,0 +1,92 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/validation.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/routes/loc
+ation.routes.ts[0m:[9
+3m10[0m:[93m27[0m - 
+[91merror[0m[90m 
+TS7030: [0mNot all 
+code paths return a 
+value.
+
+    [7m10[0m router.g
+et('/safe-zones', 
+async (req: Request, 
+res: Response, next: 
+NextFunction) => {
+    [7m  [0m [91m   
+                       
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~[0m
+    [96msrc/routes/loc
+ation.routes.ts[0m:[9
+3m37[0m:[93m27[0m - 
+[91merror[0m[90m 
+TS7030: [0mNot all 
+code paths return a 
+value.
+
+    [7m37[0m router.g
+et('/risk-zones', 
+async (req: Request, 
+res: Response, next: 
+NextFunction) => {
+    [7m  [0m [91m   
+                       
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~[0m
+    [96msrc/routes/loc
+ation.routes.ts[0m:[9
+3m64[0m:[93m30[0m - 
+[91merror[0m[90m 
+TS7030: [0mNot all 
+code paths return a 
+value.
+
+    [7m64[0m router.p
+ost('/route-safety', 
+async (req: Request, 
+res: Response, next: 
+NextFunction) => {
+    [7m  [0m [91m   
+                       
+   ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~[0m
+
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        4.856 s
+Ran all test suites.

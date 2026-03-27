@@ -1,0 +1,134 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/errors.tes
+t.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/__tests__/errors    
+.test.ts:String) [    
+], RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/validation.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m28
+[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m28[0m         
+return return 
+next(error);
+    [7m  [0m [91m   
+            ~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m52
+[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m52[0m         
+return return 
+next(error);
+    [7m  [0m [91m   
+            ~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m76
+[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m76[0m         
+return return 
+next(error);
+    [7m  [0m [91m   
+            ~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m92
+[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m92[0m         
+return return 
+next(error);
+    [7m  [0m [91m   
+            ~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m11
+5[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m115[0m        
+ return return 
+next(error);
+    [7m   [0m [91m  
+             ~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m13
+8[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m138[0m        
+ return return 
+next(error);
+    [7m   [0m [91m  
+             ~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m16
+8[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m168[0m        
+ return return 
+next(error);
+    [7m   [0m [91m  
+             ~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m19
+1[0m:[93m16[0m - 
+[91merror[0m[90m 
+TS1109: [0mExpression 
+expected.
+
+    [7m191[0m        
+ return return 
+next(error);
+    [7m   [0m [91m  
+             ~~~~~~[0m
+
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        4.687 s
+Ran all test suites.

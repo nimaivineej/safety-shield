@@ -21,7 +21,7 @@ router.post('/alert', async (req: AuthRequest, res: Response, next: NextFunction
             data: alert,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -35,28 +35,28 @@ router.get('/alerts', async (req: AuthRequest, res: Response, next: NextFunction
             data: alerts,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Get specific alert
 router.get('/alerts/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const alert = await sosService.getAlertById(req.params.id, req.user!.id);
+        const alert = await sosService.getAlertById(req.params.id as string, req.user!.id);
 
         res.json({
             success: true,
             data: alert,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Cancel SOS alert
 router.put('/alerts/:id/cancel', async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const alert = await sosService.cancelAlert(req.params.id, req.user!.id);
+        const alert = await sosService.cancelAlert(req.params.id as string, req.user!.id);
 
         res.json({
             success: true,
@@ -64,7 +64,7 @@ router.put('/alerts/:id/cancel', async (req: AuthRequest, res: Response, next: N
             data: alert,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -72,7 +72,7 @@ router.put('/alerts/:id/cancel', async (req: AuthRequest, res: Response, next: N
 router.get(
     '/active',
     authorize('AUTHORITY', 'ADMIN'),
-    async (req: AuthRequest, res: Response, next: NextFunction) => {
+    async (_req: AuthRequest, res: Response, next: NextFunction) => {
         try {
             const alerts = await sosService.getActiveAlerts();
 
@@ -81,7 +81,7 @@ router.get(
                 data: alerts,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -93,7 +93,7 @@ router.put(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         try {
             const { notes } = req.body;
-            const alert = await sosService.resolveAlert(req.params.id, notes);
+            const alert = await sosService.resolveAlert(req.params.id as string, notes);
 
             res.json({
                 success: true,
@@ -101,7 +101,7 @@ router.put(
                 data: alert,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );

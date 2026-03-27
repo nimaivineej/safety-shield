@@ -1,0 +1,89 @@
+@startuml
+!theme plain
+
+' Style Settings
+skinparam activity {
+    BackgroundColor White
+    BorderColor #2C3E50
+    FontName "Segoe UI"
+    FontSize 14
+    DiamondBackgroundColor #ECF0F1
+}
+skinparam arrow {
+    Color #34495E
+    Thickness 1.2
+}
+skinparam partition {
+    BackgroundColor #F8F9F9
+    BorderColor #BDC3C7
+}
+
+title Safety Shield - SOS & Emergency Response Activity Diagram
+
+|Mobile App (User)|
+start
+:User senses danger;
+:Triggers SOS Button;
+
+fork
+    :Capture Current GPS Coordinates;
+fork again
+    :Capture 10s Audio Clip;
+fork again
+    :Capture Front-end Image (optional);
+end fork
+
+:Create SOS Incident Package;
+:Send SOS via Socket.io / REST API;
+
+|Backend Server|
+:Receive SOS Signal;
+:Authenticate & Identify User;
+
+fork
+    :Store Incident in PostgreSQL (Prisma);
+fork again
+    :Store Media Files (Disk/S3);
+end fork
+
+:Fetch Emergency Contacts (DB);
+:Fetch Volunteers within 5km Radius;
+
+fork
+    :Dispatch SMS/Email Alerts to Contacts;
+fork again
+    :Broadcast SOS to Nearby Volunteers (Socket.io);
+end fork
+
+|Volunteer App|
+:Receive Push Notification / Socket Alert;
+:Display Emergency Alert on Map;
+
+if (Volunteer Available?) then (Yes)
+    :Volunteer clicks "Accept Incident";
+    :Update Incident Status (In Progress);
+    :Start Turn-by-Turn Navigation;
+    
+    |Mobile App (User)|
+    :Receive Notification: "Volunteer is on the way";
+    :Show Volunteer Location on Map;
+    
+    while (Incident Resolved?) is (No)
+        |Mobile App (User)|
+        :Stream Real-time Location;
+        |Volunteer App|
+        :Track User on Map;
+    endwhile (Yes)
+    
+    :Mark Incident as Resolved/Safe;
+else (No)
+    :Ignore Alert / System Auto-redispatch;
+endif
+
+|Backend Server|
+:Update DB: Incident Closed;
+:Archive Incident Data;
+
+stop
+
+@enduml

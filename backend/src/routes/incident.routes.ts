@@ -44,7 +44,7 @@ router.post(
                 data: incident,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -82,21 +82,21 @@ router.get('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
             data: incidents,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
 // Get incident by ID
 router.get('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const incident = await incidentService.getIncidentById(req.params.id);
+        const incident = await incidentService.getIncidentById(req.params.id as string);
 
         res.json({
             success: true,
             data: incident,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -108,7 +108,7 @@ router.put(
         try {
             const { status, assignedTo } = req.body;
             const incident = await incidentService.updateIncidentStatus(
-                req.params.id,
+                req.params.id as string,
                 status,
                 assignedTo
             );
@@ -119,7 +119,7 @@ router.put(
                 data: incident,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -127,14 +127,14 @@ router.put(
 // Delete incident
 router.delete('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        await incidentService.deleteIncident(req.params.id, req.user!.id);
+        await incidentService.deleteIncident(req.params.id as string, req.user!.id);
 
         res.json({
             success: true,
             message: 'Incident deleted successfully',
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

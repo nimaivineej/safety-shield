@@ -19,7 +19,7 @@ router.post('/register', async (req: AuthRequest, res: Response, next: NextFunct
             data: volunteer,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -28,7 +28,7 @@ router.get(
     '/incidents',
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         try {
-            const radius = req.query.radius ? parseFloat(req.query.radius as string) : 10;
+
 
             // Return pending incidents — any authenticated user can view to offer help
             const incidents = await req.app.locals.prisma.incidentReport.findMany({
@@ -58,7 +58,7 @@ router.get(
 
             res.json({ success: true, data: mapped });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -80,14 +80,14 @@ router.post(
                 });
             }
 
-            await volunteerService.acceptIncident(volunteer.id, req.params.id);
+            await volunteerService.acceptIncident(volunteer.id, req.params.id as string);
 
             res.json({
                 success: true,
                 message: 'Incident accepted successfully',
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -110,14 +110,14 @@ router.put(
             }
 
             const { notes } = req.body;
-            await volunteerService.completeIncident(volunteer.id, req.params.id, notes);
+            await volunteerService.completeIncident(volunteer.id, req.params.id as string, notes);
 
             res.json({
                 success: true,
                 message: 'Incident marked as completed',
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -146,7 +146,7 @@ router.get(
                 data: stats,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -177,7 +177,7 @@ router.put(
                 data: updated,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );

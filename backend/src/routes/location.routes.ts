@@ -29,7 +29,7 @@ router.get('/safe-zones', async (req: Request, res: Response, next: NextFunction
             data: safeZones,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -56,7 +56,7 @@ router.get('/risk-zones', async (req: Request, res: Response, next: NextFunction
             data: riskZones,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -79,7 +79,7 @@ router.post('/route-safety', async (req: Request, res: Response, next: NextFunct
             data: safety,
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
@@ -101,7 +101,7 @@ router.post(
                 data: safeZone,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );
@@ -124,7 +124,7 @@ router.post(
                 data: riskZone,
             });
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 );

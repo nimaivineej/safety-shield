@@ -1,0 +1,112 @@
+﻿node.exe : PASS src/uti
+ls/__tests__/validation
+.test.ts
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS src/util   
+ s/...idation.test.    
+ts:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+PASS src/utils/__tests_
+_/errors.test.ts
+FAIL src/__tests__/inte
+gration.test.ts
+  ΓùÅ Test suite 
+failed to run
+
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m97
+[0m:[93m25[0m - 
+[91merror[0m[90m 
+TS7030: [0mNot all 
+code paths return a 
+value.
+
+    [7m97[0m router.p
+ost('/refresh', async 
+(req: Request, res: 
+Response, next: 
+NextFunction) => {
+    [7m  [0m [91m   
+                     ~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m12
+0[0m:[93m30[0m - 
+[91merror[0m[90m 
+TS7030: [0mNot all 
+code paths return a 
+value.
+
+    [7m120[0m router.
+post('/verify-email', 
+async (req: Request, 
+res: Response, next: 
+NextFunction) => {
+    [7m   [0m [91m  
+                       
+    ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~[0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m14
+3[0m:[93m33[0m - 
+[91merror[0m[90m 
+TS7030: [0mNot all 
+code paths return a 
+value.
+
+    [7m143[0m router.
+post('/forgot-password'
+, async (req: Request, 
+res: Response, next: 
+NextFunction) => {
+    [7m   [0m [91m  
+                       
+       ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~[
+0m
+    [96msrc/routes/aut
+h.routes.ts[0m:[93m17
+3[0m:[93m32[0m - 
+[91merror[0m[90m 
+TS7030: [0mNot all 
+code paths return a 
+value.
+
+    [7m173[0m router.
+post('/reset-password',
+ async (req: Request, 
+res: Response, next: 
+NextFunction) => {
+    [7m   [0m [91m  
+                       
+      ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~[0
+m
+
+Test Suites: 1 failed, 
+2 passed, 3 total
+Tests:       17 
+passed, 17 total
+Snapshots:   0 total
+Time:        4.528 s
+Ran all test suites.

@@ -1,0 +1,159 @@
+@startuml
+!theme plain
+
+' Style Settings
+skinparam class {
+    BackgroundColor White
+    BorderColor #2C3E50
+    ArrowColor #34495E
+    AttributeIconSize 0
+}
+
+title Safety Shield - System Class Diagram (Data Models)
+
+enum UserRole {
+  USER
+  VOLUNTEER
+  AUTHORITY
+  ADMIN
+}
+
+enum AlertStatus {
+  ACTIVE
+  CANCELLED
+  RESOLVED
+}
+
+enum IncidentType {
+  HARASSMENT
+  ACCIDENT
+  THEFT
+  UNSAFE_AREA
+  OTHER
+}
+
+enum IncidentStatus {
+  PENDING
+  INVESTIGATING
+  RESOLVED
+  CLOSED
+}
+
+enum ServiceType {
+  HOSPITAL
+  POLICE_STATION
+  INSURANCE_AGENT
+  AMBULANCE
+}
+
+class User {
+  +id: String
+  +email: String
+  +password: String
+  +name: String
+  +phone: String
+  +role: UserRole
+  +isVerified: Boolean
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+
+class EmergencyContact {
+  +id: String
+  +userId: String
+  +name: String
+  +phone: String
+  +email: String
+  +relationship: String
+}
+
+class SOSAlert {
+  +id: String
+  +userId: String
+  +locationId: String
+  +status: AlertStatus
+  +triggeredAt: DateTime
+  +resolvedAt: DateTime
+}
+
+class IncidentReport {
+  +id: String
+  +userId: String
+  +locationId: String
+  +type: IncidentType
+  +description: String
+  +photoUrls: String[]
+  +voiceNoteUrl: String
+  +status: IncidentStatus
+  +createdAt: DateTime
+}
+
+class Location {
+  +id: String
+  +userId: String
+  +latitude: Float
+  +longitude: Float
+  +address: String
+  +createdAt: DateTime
+}
+
+class Volunteer {
+  +id: String
+  +userId: String
+  +isVerified: Boolean
+  +isAvailable: Boolean
+  +rating: Float
+  +totalResponses: Int
+}
+
+class VolunteerResponse {
+  +id: String
+  +volunteerId: String
+  +incidentId: String
+  +status: String
+  +acceptedAt: DateTime
+  +completedAt: DateTime
+}
+
+class Authority {
+  +id: String
+  +userId: String
+  +badgeNumber: String
+  +department: String
+  +jurisdiction: String
+}
+
+class Service {
+  +id: String
+  +type: ServiceType
+  +name: String
+  +phone: String
+  +latitude: Float
+  +longitude: Float
+}
+
+class Notification {
+  +id: String
+  +userId: String
+  +type: NotificationType
+  +title: String
+  +message: String
+  +isRead: Boolean
+}
+
+' Relationships
+User "1" -- "0..*" EmergencyContact : manages
+User "1" -- "0..*" SOSAlert : triggers
+User "1" -- "0..*" IncidentReport : reports
+User "1" -- "0..*" Location : has
+User "1" -- "0..1" Volunteer : is a
+User "1" -- "0..1" Authority : is a
+User "1" -- "0..*" Notification : receives
+
+IncidentReport "1" -- "0..*" VolunteerResponse : receives
+Volunteer "1" -- "0..*" VolunteerResponse : provides
+
+SOSAlert "0..*" -- "0..1" Location : at
+IncidentReport "0..*" -- "0..1" Location : at
+
+@enduml
