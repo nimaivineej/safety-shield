@@ -1,51 +1,33 @@
-# Multi-stage build for production
-FROM node:20-slim AS builder
+# Use a more complete Debian-based image for better compatibility
+FROM node:20-bookworm
 
 WORKDIR /app
 
-# Install build dependencies for Prisma
-RUN apt-get update && apt-get install -y openssl
+# Install system dependencies for Prisma
+RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Install dependencies
-RUN npm ci
+# Install ALL dependencies (including devDependencies for tsc)
+RUN npm install
 
 # Copy source code
 COPY . .
 
-# Generate Prisma Client
+# Generate Prisma Client and Build TypeScript
 RUN npx prisma generate
-
-# Build TypeScript
 RUN npm run build
 
-# Production stage
-FROM node:20-slim
-
-WORKDIR /app
-
-# Install production dependencies for Prisma
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
-
-# Copy package files
-COPY package*.json ./
-COPY prisma ./prisma/
-
-# Install production dependencies only
-RUN npm ci --only=production
-
-# Copy built files from builder
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-
-# Create uploads directory
+# Create uploads and logs directories
 RUN mkdir -p uploads logs
 
 # Expose port
 EXPOSE 5000
 
-# Start server
-CMD ["node", "dist/server.js"]
+# Set environment to production
+ENV NODE_ENV=production
+
+# Start server with a more robust command
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
