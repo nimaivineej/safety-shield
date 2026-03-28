@@ -6,6 +6,9 @@ import { sosService } from '../../services/sos.service';
 import { emergencyContactsService, EmergencyContact } from '../../services/emergency-contacts.service';
 import { settingsService } from '../../services/settings.service';
 import { sendEmergencySms } from '../../services/sms.service';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+
+const ALERT_SOUND_URL = 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'; // Emergency siren/beep
 
 export function SOSAlertScreen() {
   const navigate = useNavigate();
@@ -45,7 +48,13 @@ export function SOSAlertScreen() {
   // Countdown and send alert
   useEffect(() => {
     if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+        // Subtle haptic tick
+        if (settingsService.getSettings().vibration) {
+          Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+        }
+      }, 1000);
       return () => clearTimeout(timer);
     } else if (!alertSent && !loading) {
       sendSOSAlert();
@@ -59,6 +68,19 @@ export function SOSAlertScreen() {
 
     setLoading(true);
     setError('');
+
+    const currentSettings = settingsService.getSettings();
+
+    // Trigger vibration/haptics
+    if (currentSettings.vibration) {
+      Haptics.notification({ type: NotificationType.Error }).catch(() => {});
+    }
+
+    // Play alert sound
+    if (currentSettings.appSounds) {
+      const audio = new Audio(ALERT_SOUND_URL);
+      audio.play().catch(e => console.warn('Audio play failed:', e));
+    }
 
     try {
       const response = await sosService.createAlert({

@@ -9,10 +9,14 @@ export function NotificationsScreen() {
 
   const [settings, setSettings] = useState(settingsService.getSettings());
 
-  const toggle = (key: keyof typeof settings) => {
+  useEffect(() => {
+    settingsService.syncWithServer().then(setSettings);
+  }, []);
+
+  const toggle = async (key: keyof typeof settings) => {
     const newVal = !settings[key as keyof typeof settings];
     setSettings((prev) => ({ ...prev, [key]: newVal }));
-    settingsService.updateSettings({ [key]: newVal });
+    await settingsService.updateSettings({ [key]: newVal });
   };
 
   const Toggle = ({ id, value, onChange }: { id: string; value: boolean; onChange: () => void }) => (

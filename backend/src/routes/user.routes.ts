@@ -83,4 +83,18 @@ router.put('/settings', async (req: AuthRequest, res: Response, next: NextFuncti
     }
 });
 
+// Change password (in-app, requires current password)
+router.put('/change-password', async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ success: false, message: 'Current and new password required' });
+        }
+        await userService.changePassword(req.user!.id, currentPassword, newPassword);
+        res.json({ success: true, message: 'Password changed successfully' });
+    } catch (error) {
+        return next(error);
+    }
+});
+
 export default router;

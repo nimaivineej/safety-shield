@@ -1,5 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
-import { NotFoundError } from '../utils/errors';
+import { NotFoundError, AuthenticationError } from '../utils/errors';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -48,30 +49,48 @@ export class UserService {
     }
 
     async getUserSettings(userId: string): Promise<any> {
-        // In a real app, you'd have a separate settings table
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-            select: {
-                id: true,
-                email: true,
-                name: true,
-                phone: true,
-                role: true,
-            },
+        let settings = await prisma.notificationSettings.findUnique({
+            where: { userId },
         });
 
-        return {
-            ...user,
-            notifications: {
-                email: true,
-                sms: true,
-                push: true,
-            },
-        };
+        // If settings don't exist, return defaults
+        if (!settings) {
+            settings = await prisma.notificationSettings.create({
+                data: {
+                    userId,
+                    sosAlerts: true,
+                    incidentUpdates: true,
+                    volunteerNearby: true,
+                    appSounds: true,
+                    vibration: true,
+                    emailAlerts: false,
+                    smsAlerts: true,
+                },
+            });
+        }
+
+        return settings;
     }
 
-    async updateUserSettings(_userId: string, _settings: any): Promise<any> {
-        // Placeholder for settings update
-        return _settings;
+    async updateUserSettings(userId: string, settings: any): Promise<any> {
+        return await prisma.notificationSettings.upsert({
+            where: { userId },
+            update: settings,
+            create: {
+                userId,
+                ...settings,
+            },
+        });
+    }
+
+    async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) throw new NotFoundError('User not found');
+
+        const isValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isValid) throw new AuthenticationError('Current password is incorrect');
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        await prisma.user.update({ where: { id: userId }, data: { password: hashed } });
     }
 }

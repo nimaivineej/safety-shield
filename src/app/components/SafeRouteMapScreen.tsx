@@ -696,12 +696,7 @@ export function SafeRouteMapScreen() {
               </div>
             )}
 
-            <div className="absolute top-4 right-4 bg-white rounded-xl shadow-lg p-3 z-[1000] text-xs space-y-1">
-              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-blue-500 rounded-full" /><span>You</span></div>
-              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-purple-600 rounded-full" /><span>Destination</span></div>
-              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-green-500 rounded-full" /><span>Safe</span></div>
-              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-500 rounded-full" /><span>Risk</span></div>
-            </div>
+
 
             <button onClick={handleRecenter} className="absolute bottom-4 right-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl z-[1000]">
               <Locate className="w-5 h-5 text-purple-600" />
@@ -798,56 +793,7 @@ export function SafeRouteMapScreen() {
           </div>
         )}
 
-        {/* Safe Zones */}
-        <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
-            <Shield className="w-6 h-6 text-green-600" />Nearby Safe Zones
-            {loading && <Loader className="w-4 h-4 animate-spin text-gray-400" />}
-          </h2>
-          <div className="space-y-2">
-            {safeZones.map((zone) => (
-              <div key={zone.id} className="bg-white rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{zone.name}</h3>
-                    <p className="text-sm text-gray-500">{zone.description || 'Safe area'}</p>
-                  </div>
-                </div>
-                <Button size="sm" className="rounded-xl bg-green-600 hover:bg-green-700"
-                  onClick={async () => { setDestination(zone.name); setDestLocation([zone.latitude, zone.longitude]); setDestName(zone.name); await fetchRoute(zone.latitude, zone.longitude); }}>
-                  Navigate
-                </Button>
-              </div>
-            ))}
-            {!loading && safeZones.length === 0 && <p className="text-center text-gray-500 py-4">No safe zones found nearby</p>}
-          </div>
-        </div>
 
-        {/* Risk Zones */}
-        <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
-            <AlertTriangle className="w-6 h-6 text-red-600" />Areas to Avoid
-          </h2>
-          <div className="space-y-2">
-            {riskZones.map((zone) => (
-              <div key={zone.id} className="bg-white rounded-2xl p-4 shadow-md flex items-center justify-between border-l-4 border-red-500 hover:shadow-lg transition-shadow">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 ${zone.riskLevel === 'HIGH' ? 'bg-red-100' : 'bg-yellow-100'} rounded-full flex items-center justify-center`}>
-                    <AlertTriangle className={`w-5 h-5 ${zone.riskLevel === 'HIGH' ? 'text-red-600' : 'text-yellow-600'}`} />
-                  </div>
-                  <div><h3 className="font-semibold text-gray-900">{zone.name}</h3><p className="text-sm text-gray-500">{zone.description || 'Risk area'}</p></div>
-                </div>
-                <span className={`text-xs font-semibold px-3 py-1 rounded-full ${zone.riskLevel === 'HIGH' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                  {zone.riskLevel === 'HIGH' ? 'High Risk' : 'Caution'}
-                </span>
-              </div>
-            ))}
-            {!loading && riskZones.length === 0 && <p className="text-center text-gray-500 py-4">No risk zones found nearby</p>}
-          </div>
-        </div>
       </div>
       <BottomNav />
     </div>

@@ -75,6 +75,7 @@ model User {
   supportTickets    SupportTicket[]
   volunteer         Volunteer?
   authority         Authority?
+  notificationSettings NotificationSettings?
   
   @@index([email])
 }
@@ -277,4 +278,19 @@ model SupportTicket {
 
   @@index([userId])
   @@index([status])
+}
+
+model NotificationSettings {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  sosAlerts        Boolean  @default(true)
+  incidentUpdates  Boolean  @default(true)
+  volunteerNearby  Boolean  @default(true)
+  appSounds        Boolean  @default(true)
+  vibration        Boolean  @default(true)
+  emailAlerts      Boolean  @default(false)
+  smsAlerts        Boolean  @default(true)
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

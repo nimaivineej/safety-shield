@@ -65,6 +65,12 @@ export const volunteerService = {
         return response.data;
     },
 
+    // Get nearby services
+    async getNearbyServices() {
+        const response = await api.get(API_ENDPOINTS.SERVICES);
+        return response.data;
+    },
+
     // Get volunteer statistics
     async getVolunteerStats() {
         const response = await api.get(API_ENDPOINTS.VOLUNTEER_STATS);

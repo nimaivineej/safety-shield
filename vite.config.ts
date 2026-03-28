@@ -21,6 +21,7 @@ export default defineConfig({
   assetsInclude: ['**/*.svg', '**/*.csv'],
 
   server: {
+    host: true, // Expose to local network (0.0.0.0) so phone can access reset links
     proxy: {
       '/uploads': {
         target: 'http://localhost:5000',

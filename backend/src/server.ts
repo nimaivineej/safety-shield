@@ -50,10 +50,11 @@ app.locals.socketHandler = socketHandler;
 // Security middleware
 app.use(helmet());
 
-// CORS - Allow all origins in development
+// CORS - Allow specific origin in production, update via .env
+const corsOrigin = process.env.CORS_ORIGIN === '*' ? true : (process.env.CORS_ORIGIN || true);
 app.use(
     cors({
-        origin: true, // Allow all origins in development
+        origin: corsOrigin, 
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'],

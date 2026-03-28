@@ -113,6 +113,14 @@ export class NotificationService {
 
         if (!user) return;
 
+        // Get notification settings
+        const settings = await prisma.notificationSettings.findUnique({
+            where: { userId },
+        });
+
+        const shouldSendEmail = settings ? settings.emailAlerts : false;
+        const shouldSendSMS = settings ? settings.smsAlerts : true;
+
         const locationText = location.address || `Lat: ${location.latitude.toFixed(5)}, Lng: ${location.longitude.toFixed(5)}`;
         const mapsLink = `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
         const time = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
@@ -137,9 +145,11 @@ export class NotificationService {
                 if (!phone.startsWith('+')) {
                     phone = phone.startsWith('91') ? `+${phone}` : `+91${phone}`;
                 }
-                await this.sendSMS(phone, smsMessage)
-                    .then(() => logger.info(`SMS sent to ${contact.name} (${phone})`))
-                    .catch((err) => logger.error(`SMS failed for ${contact.name}:`, err));
+                if (shouldSendSMS) {
+                    await this.sendSMS(phone, smsMessage)
+                        .then(() => logger.info(`SMS sent to ${contact.name} (${phone})`))
+                        .catch((err) => logger.error(`SMS failed for ${contact.name}:`, err));
+                }
             }
 
             // ── Email directly to the contact ────────────
@@ -165,9 +175,11 @@ export class NotificationService {
                     </div>
                   </div>
                 `;
-                await this.sendEmail(contact.email, `🚨 EMERGENCY: ${user.name} needs help NOW!`, contactEmailHtml)
-                    .then(() => logger.info(`SOS email sent to contact ${contact.name} (${contact.email})`))
-                    .catch((err) => logger.error(`Email failed for ${contact.name}:`, err));
+                if (shouldSendEmail) {
+                    await this.sendEmail(contact.email, `🚨 EMERGENCY: ${user.name} needs help NOW!`, contactEmailHtml)
+                        .then(() => logger.info(`SOS email sent to contact ${contact.name} (${contact.email})`))
+                        .catch((err) => logger.error(`Email failed for ${contact.name}:`, err));
+                }
             }
         }
 

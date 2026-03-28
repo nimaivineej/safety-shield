@@ -2,10 +2,22 @@ import { Capacitor } from '@capacitor/core';
 
 // API Configuration
 export const getApiConfig = () => {
+    // Check for environment variables (Vite)
+    const envApiUrl = import.meta.env.VITE_API_BASE_URL;
+    const envSocketUrl = import.meta.env.VITE_SOCKET_URL;
+
+    if (envApiUrl) {
+        return {
+            BASE_URL: envApiUrl.endsWith('/api') ? envApiUrl : `${envApiUrl}/api`,
+            SOCKET_URL: envSocketUrl || envApiUrl.replace(/\/api$/, ''),
+            TIMEOUT: 30000,
+        };
+    }
+
     const isNativeAndroid = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
 
     // Local backend URL for physical device — connects to your computer's IP on the same WiFi
-    const ANDROID_HOST = 'https://harper-unruminating-wendy.ngrok-free.dev';
+    const ANDROID_HOST = 'http://10.38.39.18:5000';
 
     const BASE_URL = isNativeAndroid ? `${ANDROID_HOST}/api` : 'http://localhost:5000/api';
     const SOCKET_URL = isNativeAndroid ? ANDROID_HOST : 'http://localhost:5000';
@@ -60,4 +72,7 @@ export const API_ENDPOINTS = {
 
     // Notifications
     NOTIFICATIONS: '/notifications',
+
+    // Services
+    SERVICES: '/services',
 };

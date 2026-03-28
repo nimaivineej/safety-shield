@@ -25,9 +25,9 @@ import { AuthGuard } from "./components/AuthGuard";
 import { NotificationsScreen } from "./components/NotificationsScreen";
 import { PrivacySecurityScreen } from "./components/PrivacySecurityScreen";
 import { LocationSettingsScreen } from "./components/LocationSettingsScreen";
-import { SafetyPreferencesScreen } from "./components/SafetyPreferencesScreen";
 import { HelpSupportScreen } from "./components/HelpSupportScreen";
 import { AlertsScreen } from "./components/AlertsScreen";
+import { ChangePasswordScreen } from "./components/ChangePasswordScreen";
 
 // Helper to wrap a component with AuthGuard
 function guarded(Component: React.ComponentType, requiredRole?: string) {
@@ -58,6 +58,10 @@ export const router = createBrowserRouter([
   {
     path: "/reset-password",
     Component: ResetPasswordScreen,
+  },
+  {
+    path: "/change-password",
+    Component: guarded(ChangePasswordScreen),
   },
   {
     path: "/register",
@@ -108,10 +112,6 @@ export const router = createBrowserRouter([
   {
     path: "/location-settings",
     Component: guarded(LocationSettingsScreen),
-  },
-  {
-    path: "/safety-preferences",
-    Component: guarded(SafetyPreferencesScreen),
   },
   {
     path: "/help-support",

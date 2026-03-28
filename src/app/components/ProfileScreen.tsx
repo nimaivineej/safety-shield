@@ -30,9 +30,9 @@ export function ProfileScreen() {
 
   const settingsOptions = [
     { icon: Bell, label: 'Notifications', description: 'Manage alert preferences', path: '/notifications' },
+    { icon: Lock, label: 'Change Password', description: 'Update your password', path: '/change-password' },
     { icon: Lock, label: 'Privacy & Security', description: 'Control your data', path: '/privacy-security' },
     { icon: MapPin, label: 'Location Settings', description: 'Location sharing options', path: '/location-settings' },
-    { icon: Shield, label: 'Safety Preferences', description: 'Customize safety features', path: '/safety-preferences' },
     { icon: HelpCircle, label: 'Help & Support', description: 'Get assistance', path: '/help-support' },
   ];
 

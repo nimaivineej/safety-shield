@@ -1,3 +1,6 @@
+import api from './api';
+import { API_ENDPOINTS } from '../config/api.config';
+
 const SETTINGS_KEY = 'safety_app_settings';
 
 export interface AppSettings {
@@ -68,13 +71,41 @@ export const settingsService = {
     return DEFAULT_SETTINGS;
   },
 
-  updateSettings(updates: Partial<AppSettings>): AppSettings {
+  async syncWithServer(): Promise<AppSettings> {
+    try {
+      const response = await api.get(API_ENDPOINTS.SETTINGS);
+      const serverSettings = response.data.data;
+      if (serverSettings) {
+        const current = this.getSettings();
+        const merged = { ...current, ...serverSettings };
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
+        return merged;
+      }
+    } catch (e) {
+      console.error('Failed to sync settings with server', e);
+    }
+    return this.getSettings();
+  },
+
+  async updateSettings(updates: Partial<AppSettings>): Promise<AppSettings> {
     const current = this.getSettings();
     const newSettings = { ...current, ...updates };
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings));
     
     // Dispatch an event so other parts of the app can react (like muting sounds)
     window.dispatchEvent(new CustomEvent('settingsChanged', { detail: newSettings }));
+    
+    // Sync with backend if it's a notification setting
+    const notificationKeys = ['sosAlerts', 'incidentUpdates', 'volunteerNearby', 'appSounds', 'vibration', 'emailAlerts', 'smsAlerts'];
+    const hasNotificationUpdate = Object.keys(updates).some(key => notificationKeys.includes(key));
+    
+    if (hasNotificationUpdate) {
+      try {
+        await api.put(API_ENDPOINTS.SETTINGS, updates);
+      } catch (e) {
+        console.error('Failed to update settings on server', e);
+      }
+    }
     
     return newSettings;
   },
