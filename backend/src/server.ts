@@ -51,6 +51,9 @@ app.locals.socketHandler = socketHandler;
 // Security middleware
 app.use(helmet());
 
+// Trust Railway's edge proxy for rate limiting and IP detection
+app.set('trust proxy', 1);
+
 // CORS - Allow specific origin in production, update via .env
 const corsOrigin = process.env.CORS_ORIGIN === '*' ? true : (process.env.CORS_ORIGIN || true);
 app.use(
