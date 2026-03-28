@@ -1,3 +1,4 @@
+console.log("Server starting...");
 import express, { Application, Request, Response } from 'express';
 import { createServer } from 'http';
 import cors from 'cors';

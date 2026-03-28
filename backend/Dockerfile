@@ -30,4 +30,4 @@ EXPOSE 5000
 ENV NODE_ENV=production
 
 # Start server with a more robust command
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && ls -R dist && node dist/server.js"]
