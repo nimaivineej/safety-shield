@@ -7,6 +7,15 @@ export const getApiConfig = () => {
     const envSocketUrl = import.meta.env.VITE_SOCKET_URL;
 
     if (envApiUrl) {
+        // If the env points to the blocked Railway domain, use the Vercel proxy rewrite instead
+        if (envApiUrl.includes('railway.app')) {
+            return {
+                BASE_URL: '/api',
+                SOCKET_URL: '', // Connects to same origin, will fall back to long-polling via proxy
+                TIMEOUT: 30000,
+            };
+        }
+
         return {
             BASE_URL: envApiUrl.endsWith('/api') ? envApiUrl : `${envApiUrl}/api`,
             SOCKET_URL: envSocketUrl || envApiUrl.replace(/\/api$/, ''),
