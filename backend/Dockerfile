@@ -29,5 +29,5 @@ EXPOSE 5000
 # Set environment to production
 ENV NODE_ENV=production
 
-# Start server with a more robust command
-CMD ["sh", "-c", "npx prisma migrate deploy && ls -R dist && node dist/server.js"]
+# Start server with db push instead of migrate deploy to ensure schema is synchronized directly
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && node dist/server.js"]
