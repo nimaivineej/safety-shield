@@ -118,7 +118,7 @@ export class NotificationService {
             where: { userId },
         });
 
-        const shouldSendEmail = settings ? settings.emailAlerts : false;
+        const shouldSendEmail = settings ? settings.emailAlerts : true;
         const shouldSendSMS = settings ? settings.smsAlerts : true;
 
         const locationText = location.address || `Lat: ${location.latitude.toFixed(5)}, Lng: ${location.longitude.toFixed(5)}`;
