@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { authService } from '../../services/auth.service';
 import api from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api.config';
-
+export function ChangePasswordScreen() {
     const navigate = useNavigate();
     const user = authService.getCurrentUser();
     const isVolunteer = user?.role === 'VOLUNTEER';

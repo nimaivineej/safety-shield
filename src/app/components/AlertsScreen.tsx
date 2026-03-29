@@ -18,7 +18,7 @@ const colorMap: Record<string, string> = {
   VOLUNTEER_RESPONSE: 'bg-green-100 text-green-600',
   SYSTEM: 'bg-blue-100 text-blue-600',
 };
-
+export function AlertsScreen() {
   const navigate = useNavigate();
   const user = authService.getCurrentUser();
   const isVolunteer = user?.role === 'VOLUNTEER';
