@@ -13,7 +13,7 @@ import {
 import { Button } from './ui/button';
 import { volunteerService, Incident, VolunteerStats } from '../../services/volunteer.service';
 import { authService } from '../../services/auth.service';
-import { VolunteerBottomNav } from './VolunteerBottomNav';
+import { BottomNav } from './BottomNav';
 
 export function VolunteerDashboard() {
     const navigate = useNavigate();
@@ -311,7 +311,7 @@ export function VolunteerDashboard() {
                     </div>
                 )}
             </div>
-            <VolunteerBottomNav />
+            <BottomNav />
         </div>
     );
 }

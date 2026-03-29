@@ -1,10 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Users } from 'lucide-react';
 import { Button } from './ui/button';
+import { authService } from '../../services/auth.service';
 
 export function LoginSelectionScreen() {
     const navigate = useNavigate();
+
+    // Remove auto-redirect since SplashScreen handles it and we want users to be able to choose portals
+    /*
+    useEffect(() => {
+        if (authService.isAuthenticated()) {
+            const user = authService.getCurrentUser();
+            if (user?.role === 'ADMIN') {
+                navigate('/admin-dashboard');
+            } else if (user?.role === 'VOLUNTEER') {
+                navigate('/volunteer-dashboard');
+            } else {
+                navigate('/home');
+            }
+        }
+    }, [navigate]);
+    */
 
     const loginOptions = [
         {

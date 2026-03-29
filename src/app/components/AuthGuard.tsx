@@ -13,7 +13,13 @@ export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
 
     if (requiredRole) {
         const user = authService.getCurrentUser();
-        if (user?.role !== requiredRole) {
+        const role = user?.role;
+
+        // Special case: USER and VOLUNTEER are interchangeable for volunteer routes
+        const isVolunteerRoute = requiredRole === 'VOLUNTEER';
+        const hasAccess = role === requiredRole || (isVolunteerRoute && role === 'USER');
+
+        if (!hasAccess) {
             return <Navigate to="/home" replace />;
         }
     }

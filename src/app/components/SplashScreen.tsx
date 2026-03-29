@@ -1,13 +1,23 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Heart } from 'lucide-react';
+import { authService } from '../../services/auth.service';
 
 export function SplashScreen() {
   const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/login-selection');
+      if (authService.isAuthenticated()) {
+        const user = authService.getCurrentUser();
+        if (user?.role === 'ADMIN') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/home');
+        }
+      } else {
+        navigate('/login-selection');
+      }
     }, 3000);
 
     return () => clearTimeout(timer);

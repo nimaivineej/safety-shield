@@ -16,7 +16,7 @@ import {
     ChevronRight,
 } from 'lucide-react';
 import { Button } from './ui/button';
-import { VolunteerBottomNav } from './VolunteerBottomNav';
+import { BottomNav } from './BottomNav';
 import { authService } from '../../services/auth.service';
 import { volunteerService } from '../../services/volunteer.service';
 
@@ -163,7 +163,7 @@ export function VolunteerProfileScreen() {
                 </Button>
             </div>
 
-            <VolunteerBottomNav />
+            <BottomNav />
         </div>
     );
 }

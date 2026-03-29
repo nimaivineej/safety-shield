@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Mail, Lock, Eye, EyeOff, Users } from 'lucide-react';
 import { Button } from './ui/button';
@@ -7,6 +7,19 @@ import { authService } from '../../services/auth.service';
 
 export function VolunteerLoginScreen() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authService.isAuthenticated()) {
+            const user = authService.getCurrentUser();
+            if (user?.role === 'ADMIN') {
+                navigate('/admin-dashboard');
+            } else if (user?.role === 'VOLUNTEER') {
+                navigate('/volunteer-dashboard');
+            } else {
+                navigate('/home');
+            }
+        }
+    }, [navigate]);
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,15 +34,7 @@ export function VolunteerLoginScreen() {
         try {
             const response = await authService.login({ email, password });
 
-            // Check if user is actually a volunteer
-            if (response.data.user.role !== 'VOLUNTEER') {
-                setError('This login is only for volunteers. Please use the correct login page.');
-                authService.logout();
-                setLoading(false);
-                return;
-            }
-
-            console.log('✅ Volunteer login successful:', response);
+            console.log('✅ Volunteer portal login successful:', response);
             navigate('/volunteer-dashboard');
         } catch (err: any) {
             console.error('❌ Login failed:', err);

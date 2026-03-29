@@ -25,7 +25,7 @@ import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { volunteerService, Incident } from '../../services/volunteer.service';
-import { VolunteerBottomNav } from './VolunteerBottomNav';
+import { BottomNav } from './BottomNav';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { useMap, Polyline } from 'react-leaflet';
@@ -784,7 +784,7 @@ export function VolunteerMapScreen() {
                 </div>
             )}
 
-            <VolunteerBottomNav inline />
+            <BottomNav inline={true} />
         </div>
     );
 }

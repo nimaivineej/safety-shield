@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Mail, Lock, Eye, EyeOff, BadgeCheck } from 'lucide-react';
 import { Button } from './ui/button';
@@ -7,6 +7,21 @@ import { authService } from '../../services/auth.service';
 
 export function AuthorityLoginScreen() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authService.isAuthenticated()) {
+            const user = authService.getCurrentUser();
+            if (user?.role === 'ADMIN') {
+                navigate('/admin-dashboard');
+            } else if (user?.role === 'VOLUNTEER') {
+                navigate('/volunteer-dashboard');
+            } else if (user?.role === 'AUTHORITY') {
+                navigate('/authority-dashboard');
+            } else {
+                navigate('/home');
+            }
+        }
+    }, [navigate]);
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

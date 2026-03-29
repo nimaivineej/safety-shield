@@ -123,18 +123,16 @@ router.put(
 // Get volunteer stats
 router.get(
     '/stats',
-    authorize('VOLUNTEER', 'ADMIN'),
+    authorize('VOLUNTEER', 'ADMIN', 'USER'),
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         try {
-            const volunteer = await req.app.locals.prisma.volunteer.findUnique({
+            let volunteer = await req.app.locals.prisma.volunteer.findUnique({
                 where: { userId: req.user!.id },
             });
 
+            // Auto-register as volunteer if profile doesn't exist
             if (!volunteer) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Volunteer profile not found',
-                });
+                volunteer = await volunteerService.registerVolunteer(req.user!.id);
             }
 
             const stats = await volunteerService.getVolunteerStats(volunteer.id);
@@ -152,18 +150,16 @@ router.get(
 // Update availability
 router.put(
     '/availability',
-    authorize('VOLUNTEER', 'ADMIN'),
+    authorize('VOLUNTEER', 'ADMIN', 'USER'),
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         try {
-            const volunteer = await req.app.locals.prisma.volunteer.findUnique({
+            let volunteer = await req.app.locals.prisma.volunteer.findUnique({
                 where: { userId: req.user!.id },
             });
 
+            // Auto-register as volunteer if profile doesn't exist
             if (!volunteer) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Volunteer profile not found',
-                });
+                volunteer = await volunteerService.registerVolunteer(req.user!.id);
             }
 
             const { isAvailable } = req.body;
