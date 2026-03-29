@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, AlertCircle, FileText, Users, CheckCircle, Clock, Loader } from 'lucide-react';
 import { BottomNav } from './BottomNav';
+import { authService } from '../../services/auth.service';
 import { notificationService } from '../../services/notification.service';
 
 const iconMap: Record<string, any> = {
@@ -18,8 +19,16 @@ const colorMap: Record<string, string> = {
   SYSTEM: 'bg-blue-100 text-blue-600',
 };
 
-export function AlertsScreen() {
   const navigate = useNavigate();
+  const user = authService.getCurrentUser();
+  const isVolunteer = user?.role === 'VOLUNTEER';
+
+  // Theme constants
+  const primaryGradient = isVolunteer ? 'from-green-600 to-teal-500' : 'from-purple-600 to-blue-500';
+  const primaryColor = isVolunteer ? 'text-green-600' : 'text-purple-600';
+  const primaryBg = isVolunteer ? 'bg-green-100' : 'bg-purple-100';
+  const screenBg = isVolunteer ? 'from-green-50 via-white to-teal-50' : 'from-purple-50 via-white to-blue-50';
+
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,17 +57,17 @@ export function AlertsScreen() {
   };
 
   const unread = notifications.filter((n) => !n.isRead).length;
-
+  
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 pb-20">
+    <div className={`min-h-screen bg-gradient-to-br ${screenBg} pb-20`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-6 rounded-b-3xl shadow-lg">
+      <div className={`bg-gradient-to-r ${primaryGradient} text-white p-6 rounded-b-3xl shadow-lg`}>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Bell className="w-6 h-6" /> Alerts
             </h1>
-            <p className="text-purple-100 mt-1">
+            <p className={`${isVolunteer ? 'text-green-50' : 'text-purple-100'} mt-1`}>
               {unread > 0 ? `${unread} unread notification${unread > 1 ? 's' : ''}` : 'All caught up!'}
             </p>
           </div>
@@ -98,7 +107,7 @@ export function AlertsScreen() {
                   key={notif.id}
                   onClick={() => !notif.isRead && handleMarkRead(notif.id)}
                   className={`bg-white rounded-2xl p-4 shadow-sm flex items-start gap-4 cursor-pointer transition-all border-2 ${
-                    notif.isRead ? 'border-transparent opacity-75' : 'border-purple-200'
+                    notif.isRead ? 'border-transparent opacity-75' : isVolunteer ? 'border-green-200' : 'border-purple-200'
                   }`}
                 >
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${colorClass}`}>
@@ -106,8 +115,8 @@ export function AlertsScreen() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <p className={`font-semibold text-gray-900 ${!notif.isRead ? 'text-purple-900' : ''}`}>{notif.title}</p>
-                      {!notif.isRead && <span className="w-2.5 h-2.5 rounded-full bg-purple-600 flex-shrink-0 mt-1" />}
+                      <p className={`font-semibold text-gray-900 ${!notif.isRead ? (isVolunteer ? 'text-green-900' : 'text-purple-900') : ''}`}>{notif.title}</p>
+                      {!notif.isRead && <span className={`w-2.5 h-2.5 rounded-full ${isVolunteer ? 'bg-green-600' : 'bg-purple-600'} flex-shrink-0 mt-1`} />}
                     </div>
                     <p className="text-sm text-gray-500 mt-0.5 leading-snug">{notif.message}</p>
                     <div className="flex items-center gap-1 mt-2 text-xs text-gray-400">

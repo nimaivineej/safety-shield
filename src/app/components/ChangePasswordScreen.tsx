@@ -3,11 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Lock, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { authService } from '../../services/auth.service';
 import api from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api.config';
 
-export function ChangePasswordScreen() {
     const navigate = useNavigate();
+    const user = authService.getCurrentUser();
+    const isVolunteer = user?.role === 'VOLUNTEER';
+    const backPath = isVolunteer ? '/volunteer-profile' : '/profile';
+    
+    // Theme constants
+    const primaryGradient = isVolunteer ? 'from-green-600 to-teal-500' : 'from-purple-600 to-blue-500';
+    const primaryButton = isVolunteer ? 'from-green-600 to-teal-500 hover:from-green-700 hover:to-teal-600' : 'from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600';
+    const screenBg = isVolunteer ? 'from-green-50 via-white to-teal-50' : 'from-purple-50 via-white to-blue-50';
+    const primaryFocus = isVolunteer ? 'focus:border-green-500' : 'focus:border-purple-500';
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -43,12 +52,12 @@ export function ChangePasswordScreen() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+        <div className={`min-h-screen bg-gradient-to-br ${screenBg}`}>
             {/* Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-6">
+            <div className={`bg-gradient-to-r ${primaryGradient} text-white p-6`}>
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() => navigate('/profile')}
+                        onClick={() => navigate(backPath)}
                         className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30"
                     >
                         <ArrowLeft className="w-6 h-6" />
@@ -69,8 +78,8 @@ export function ChangePasswordScreen() {
                         <h2 className="text-2xl font-bold text-gray-900">Password Changed!</h2>
                         <p className="text-gray-600">Your password has been updated successfully.</p>
                         <Button
-                            onClick={() => navigate('/profile')}
-                            className="w-full h-14 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-500"
+                            onClick={() => navigate(backPath)}
+                            className={`w-full h-14 rounded-2xl bg-gradient-to-r ${primaryButton}`}
                         >
                             Back to Profile
                         </Button>
@@ -142,7 +151,7 @@ export function ChangePasswordScreen() {
                             <Button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full h-14 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white font-semibold shadow-lg disabled:opacity-50 mt-2"
+                                className={`w-full h-14 rounded-2xl bg-gradient-to-r ${primaryButton} text-white font-semibold shadow-lg disabled:opacity-50 mt-2`}
                             >
                                 {loading ? 'Updating Password...' : 'Update Password'}
                             </Button>
