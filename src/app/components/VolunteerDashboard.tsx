@@ -76,11 +76,18 @@ export function VolunteerDashboard() {
 
     const handleAcceptIncident = async (incident: Incident) => {
         try {
+            // Update local state immediately
+            setIncidents(prev => prev.map(inc =>
+                inc.id === incident.id ? { ...inc, status: 'INVESTIGATING' } : inc
+            ));
+
             await volunteerService.acceptIncident(incident.id);
             alert('Incident accepted! Navigate to the location.');
             loadData();
             navigate(`/volunteer/incident/${incident.id}`);
         } catch (error: any) {
+            console.error('Failed to accept incident:', error);
+            loadData(); // Revert by reloading
             alert(error.response?.data?.message || 'Failed to accept incident');
         }
     };

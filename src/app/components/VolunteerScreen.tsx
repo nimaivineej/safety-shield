@@ -44,13 +44,17 @@ export function VolunteerScreen() {
 
   const handleAccept = async (id: string) => {
     try {
-      await volunteerService.acceptIncident(id);
-      setIncidents(incidents.map(inc =>
-        inc.id === id ? { ...inc, status: 'ACCEPTED' } : inc
+      // Update local state immediately for instant UI feedback
+      setIncidents(prev => prev.map(inc =>
+        inc.id === id ? { ...inc, status: 'INVESTIGATING' } : inc
       ));
+      
+      await volunteerService.acceptIncident(id);
       alert('Incident accepted successfully! Please proceed to help.');
     } catch (err: any) {
       console.error('Failed to accept incident:', err);
+      // Revert state on failure
+      fetchIncidents();
       alert(err.response?.data?.message || 'Failed to accept incident. Please try again.');
     }
   };
