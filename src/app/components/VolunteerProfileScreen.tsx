@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
     User,
     Mail,
@@ -128,10 +128,10 @@ export function VolunteerProfileScreen() {
                     {settingsItems.map((item, i) => {
                         const Icon = item.icon;
                         return (
-                            <button
+                            <Link
                                 key={item.label}
-                                onClick={() => navigate(item.path)}
-                                className={`w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors ${i !== settingsItems.length - 1 ? 'border-b border-gray-100' : ''}`}
+                                to={item.path}
+                                className={`w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors cursor-pointer ${i !== settingsItems.length - 1 ? 'border-b border-gray-100' : ''}`}
                             >
                                 <div className="w-10 h-10 bg-gradient-to-br from-green-100 to-teal-100 rounded-xl flex items-center justify-center">
                                     <Icon className="w-5 h-5 text-green-600" />
@@ -141,7 +141,7 @@ export function VolunteerProfileScreen() {
                                     <p className="text-xs text-gray-500">{item.description}</p>
                                 </div>
                                 <ChevronRight className="w-5 h-5 text-gray-400" />
-                            </button>
+                            </Link>
                         );
                     })}
                 </div>
