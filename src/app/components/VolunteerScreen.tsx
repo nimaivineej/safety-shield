@@ -48,8 +48,10 @@ export function VolunteerScreen() {
       setIncidents(incidents.map(inc =>
         inc.id === id ? { ...inc, status: 'ACCEPTED' } : inc
       ));
-    } catch (err) {
+      alert('Incident accepted successfully! Please proceed to help.');
+    } catch (err: any) {
       console.error('Failed to accept incident:', err);
+      alert(err.response?.data?.message || 'Failed to accept incident. Please try again.');
     }
   };
 
@@ -59,8 +61,10 @@ export function VolunteerScreen() {
       setIncidents(incidents.map(inc =>
         inc.id === id ? { ...inc, status: 'RESOLVED' } : inc
       ));
-    } catch (err) {
+      alert('Thank you for your help! Incident marked as resolved.');
+    } catch (err: any) {
       console.error('Failed to complete incident:', err);
+      alert(err.response?.data?.message || 'Failed to mark incident as handled.');
     }
   };
 

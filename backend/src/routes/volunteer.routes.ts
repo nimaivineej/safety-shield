@@ -63,21 +63,19 @@ router.get(
     }
 );
 
-// Accept incident (Volunteer only)
+// Accept incident (All authenticated users can help)
 router.post(
     '/incidents/:id/accept',
-    authorize('VOLUNTEER', 'ADMIN'),
+    authorize('VOLUNTEER', 'ADMIN', 'USER'),
     async (req: AuthRequest, res: Response, next: NextFunction) => {
         try {
-            const volunteer = await req.app.locals.prisma.volunteer.findUnique({
+            let volunteer = await req.app.locals.prisma.volunteer.findUnique({
                 where: { userId: req.user!.id },
             });
 
+            // Auto-register as volunteer if profile doesn't exist
             if (!volunteer) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Volunteer profile not found',
-                });
+                volunteer = await volunteerService.registerVolunteer(req.user!.id);
             }
 
             await volunteerService.acceptIncident(volunteer.id, req.params.id as string);
