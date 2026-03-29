@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Lock, Eye, EyeOff, Shield, Trash2, Key } from 'lucide-react';
 import { authService } from '../../services/auth.service';
 import { BottomNav } from './BottomNav';
@@ -8,11 +8,14 @@ import { settingsService } from '../../services/settings.service';
 
 export function PrivacySecurityScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   
   const [settings, setSettings] = useState(settingsService.getSettings());
   const user = authService.getCurrentUser();
-  const isVolunteer = user?.role === 'VOLUNTEER';
+  
+  // Use path-based mode detection for consistent dual-role experience
+  const isVolunteer = location.pathname.startsWith('/volunteer/');
   const backPath = isVolunteer ? '/volunteer-profile' : '/profile';
 
   // Theme constants

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Bell, Volume2, Vibrate, AlertCircle, Users, FileText, ChevronRight } from 'lucide-react';
 import { BottomNav } from './BottomNav';
 import { authService } from '../../services/auth.service';
@@ -7,10 +7,13 @@ import { settingsService } from '../../services/settings.service';
 
 export function NotificationsScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [settings, setSettings] = useState(settingsService.getSettings());
   const user = authService.getCurrentUser();
-  const isVolunteer = user?.role === 'VOLUNTEER';
+  
+  // Use path-based mode detection for consistent dual-role experience
+  const isVolunteer = location.pathname.startsWith('/volunteer/');
   const backPath = isVolunteer ? '/volunteer-profile' : '/profile';
   
   // Theme constants

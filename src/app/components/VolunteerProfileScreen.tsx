@@ -55,9 +55,9 @@ export function VolunteerProfileScreen() {
     }
 
     const settingsItems = [
-        { icon: Bell, label: 'Notifications', description: 'Alert & availability settings', path: '/notifications' },
-        { icon: Lock, label: 'Privacy & Security', description: 'Manage your account security', path: '/privacy-security' },
-        { icon: HelpCircle, label: 'Help & Support', description: 'FAQs and contact support', path: '/help-support' },
+        { icon: Bell, label: 'Notifications', description: 'Alert & availability settings', path: '/volunteer/notifications' },
+        { icon: Lock, label: 'Privacy & Security', description: 'Manage your account security', path: '/volunteer/privacy-security' },
+        { icon: HelpCircle, label: 'Help & Support', description: 'FAQs and contact support', path: '/volunteer/help-support' },
     ];
 
     return (

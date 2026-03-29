@@ -142,6 +142,18 @@ export const router = createBrowserRouter([
     Component: guarded(VolunteerProfileScreen, 'VOLUNTEER'),
   },
   {
+    path: "/volunteer/notifications",
+    Component: guarded(NotificationsScreen, 'VOLUNTEER'),
+  },
+  {
+    path: "/volunteer/privacy-security",
+    Component: guarded(PrivacySecurityScreen, 'VOLUNTEER'),
+  },
+  {
+    path: "/volunteer/help-support",
+    Component: guarded(HelpSupportScreen, 'VOLUNTEER'),
+  },
+  {
     path: "/admin-dashboard",
     Component: guarded(AdminDashboard, 'ADMIN'),
   },

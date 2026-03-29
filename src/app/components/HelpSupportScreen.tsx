@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, HelpCircle, MessageCircle, Phone, Mail, ChevronDown, ChevronUp, ExternalLink, Loader2 } from 'lucide-react';
 import { BottomNav } from './BottomNav';
 import { authService } from '../../services/auth.service';
@@ -34,8 +34,11 @@ const faqs = [
 
 export function HelpSupportScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = authService.getCurrentUser();
-  const isVolunteer = user?.role === 'VOLUNTEER';
+  
+  // Use path-based mode detection for consistent dual-role experience
+  const isVolunteer = location.pathname.startsWith('/volunteer/');
   const backPath = isVolunteer ? '/volunteer-profile' : '/profile';
   
   // Theme constants
