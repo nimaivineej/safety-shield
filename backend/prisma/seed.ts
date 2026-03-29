@@ -20,8 +20,21 @@ async function main() {
     await prisma.riskZone.deleteMany();
     await prisma.user.deleteMany();
 
-    // Hash password for test users
-    const hashedPassword = await bcrypt.hash('password123', 10);
+    // Hash passwords
+    const defaultPassword = await bcrypt.hash('password123', 10);
+    const adminPassword = await bcrypt.hash('12345678', 10);
+
+    // Create admin user
+    console.log('🔑 Creating admin user...');
+    await prisma.user.create({
+        data: {
+            email: 'safetyshield453@gmail.com',
+            password: adminPassword,
+            name: 'System Admin',
+            role: UserRole.ADMIN,
+            isVerified: true,
+        },
+    });
 
     // Create test users
     console.log('👤 Creating test users...');
@@ -29,7 +42,7 @@ async function main() {
     const user1 = await prisma.user.create({
         data: {
             email: 'user@test.com',
-            password: hashedPassword,
+            password: defaultPassword,
             name: 'Test User',
             phone: '+1234567890',
             role: UserRole.USER,
@@ -40,7 +53,7 @@ async function main() {
     const user2 = await prisma.user.create({
         data: {
             email: 'jane@test.com',
-            password: hashedPassword,
+            password: defaultPassword,
             name: 'Jane Doe',
             phone: '+1234567891',
             role: UserRole.USER,
@@ -51,7 +64,7 @@ async function main() {
     const volunteerUser = await prisma.user.create({
         data: {
             email: 'volunteer@test.com',
-            password: hashedPassword,
+            password: defaultPassword,
             name: 'John Volunteer',
             phone: '+1234567892',
             role: UserRole.VOLUNTEER,
@@ -62,7 +75,7 @@ async function main() {
     const authorityUser = await prisma.user.create({
         data: {
             email: 'authority@test.com',
-            password: hashedPassword,
+            password: defaultPassword,
             name: 'Officer Smith',
             phone: '+1234567893',
             role: UserRole.AUTHORITY,
@@ -292,9 +305,14 @@ async function main() {
     console.log('- 1 volunteer response');
     console.log('- 2 notifications');
     console.log('\n🔑 Test Credentials:');
-    console.log('User: user@test.com / password123');
-    console.log('Volunteer: volunteer@test.com / password123');
-    console.log('Authority: authority@test.com / password123');
+    logCredential('Admin', 'safetyshield453@gmail.com', '12345678');
+    logCredential('User', 'user@test.com', 'password123');
+    logCredential('Volunteer', 'volunteer@test.com', 'password123');
+    logCredential('Authority', 'authority@test.com', 'password123');
+}
+
+function logCredential(role: string, email: string, pass: string) {
+    console.log(`${role.padEnd(10)}: ${email.padEnd(30)} / ${pass}`);
 }
 
 main()

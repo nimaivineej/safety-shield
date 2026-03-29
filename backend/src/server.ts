@@ -8,6 +8,8 @@ import rateLimit from 'express-rate-limit';
 import { PrismaClient } from '@prisma/client';
 import path from 'path';
 import fs from 'fs';
+import bcrypt from 'bcryptjs';
+import { UserRole } from '@prisma/client';
 
 // Import middleware
 import { errorHandler } from './middleware/error-handler';
@@ -170,12 +172,54 @@ app.use(errorHandler);
 // Server configuration
 const PORT = process.env.PORT || 5000;
 
+/**
+ * Ensures a default admin user exists in the database.
+ * Resolves "Invalid credentials" errors forever by auto-creating the admin on startup.
+ */
+const ensureAdminUser = async (prisma: PrismaClient) => {
+    const adminEmail = 'safetyshield453@gmail.com';
+    const adminPassword = '12345678';
+
+    try {
+        const existingAdmin = await prisma.user.findUnique({
+            where: { email: adminEmail }
+        });
+
+        if (!existingAdmin) {
+            logger.info('👤 Admin user not found, creating...');
+            const hashedPassword = await bcrypt.hash(adminPassword, 10);
+            await prisma.user.create({
+                data: {
+                    email: adminEmail,
+                    password: hashedPassword,
+                    name: 'System Admin',
+                    role: UserRole.ADMIN,
+                    isVerified: true
+                }
+            });
+            logger.info('✅ Admin user created successfully');
+        } else if (existingAdmin.role !== UserRole.ADMIN) {
+            logger.info('🆙 Updating existing user to ADMIN role...');
+            await prisma.user.update({
+                where: { email: adminEmail },
+                data: { role: UserRole.ADMIN, isVerified: true }
+            });
+            logger.info('✅ User role updated to ADMIN');
+        }
+    } catch (error) {
+        logger.error('❌ Error ensuring admin user:', error);
+    }
+};
+
 // Start server
 const startServer = async () => {
     try {
         // Test database connection
         await prisma.$connect();
         logger.info('✅ Database connected successfully');
+
+        // Ensure admin user exists (forever fix for deployed app)
+        await ensureAdminUser(prisma);
 
         server.listen(Number(PORT), '0.0.0.0', () => {
             logger.info(`🚀 Server is running on port ${PORT}`);
