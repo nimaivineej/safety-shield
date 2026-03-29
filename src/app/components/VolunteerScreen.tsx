@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin, Clock, CheckCircle, AlertCircle, Phone, RefreshCw } 
 import { Button } from './ui/button';
 import { BottomNav } from './BottomNav';
 import { volunteerService, Incident } from '../../services/volunteer.service';
+import { authService } from '../../services/auth.service';
 
 export function VolunteerScreen() {
   const navigate = useNavigate();

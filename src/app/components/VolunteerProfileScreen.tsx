@@ -55,9 +55,9 @@ export function VolunteerProfileScreen() {
     }
 
     const settingsItems = [
-        { icon: Bell, label: 'Notifications', description: 'Alert & availability settings' },
-        { icon: Lock, label: 'Privacy & Security', description: 'Manage your account security' },
-        { icon: HelpCircle, label: 'Help & Support', description: 'FAQs and contact support' },
+        { icon: Bell, label: 'Notifications', description: 'Alert & availability settings', path: '/notifications' },
+        { icon: Lock, label: 'Privacy & Security', description: 'Manage your account security', path: '/privacy-security' },
+        { icon: HelpCircle, label: 'Help & Support', description: 'FAQs and contact support', path: '/help-support' },
     ];
 
     return (
@@ -130,6 +130,7 @@ export function VolunteerProfileScreen() {
                         return (
                             <button
                                 key={item.label}
+                                onClick={() => navigate(item.path)}
                                 className={`w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors ${i !== settingsItems.length - 1 ? 'border-b border-gray-100' : ''}`}
                             >
                                 <div className="w-10 h-10 bg-gradient-to-br from-green-100 to-teal-100 rounded-xl flex items-center justify-center">

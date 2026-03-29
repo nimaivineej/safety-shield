@@ -188,7 +188,7 @@ const ensureAdminUser = async (prisma: PrismaClient) => {
         if (!existingAdmin) {
             logger.info('👤 Admin user not found, creating...');
             const hashedPassword = await bcrypt.hash(adminPassword, 10);
-            const admin = await prisma.user.create({
+            await prisma.user.create({
                 data: {
                     email: adminEmail,
                     password: hashedPassword,
@@ -198,38 +198,13 @@ const ensureAdminUser = async (prisma: PrismaClient) => {
                 }
             });
             logger.info('✅ Admin user created successfully');
-
-            // Also ensure admin has a volunteer profile to test features
-            await prisma.volunteer.upsert({
-                where: { userId: admin.id },
-                update: {},
-                create: {
-                    userId: admin.id,
-                    isVerified: true,
-                    isAvailable: true
-                }
+        } else if (existingAdmin.role !== UserRole.ADMIN) {
+            logger.info('🆙 Updating existing user to ADMIN role...');
+            await prisma.user.update({
+                where: { email: adminEmail },
+                data: { role: UserRole.ADMIN, isVerified: true }
             });
-            logger.info('✅ Admin volunteer profile ensures');
-        } else {
-            // Ensure even existing admin has a volunteer profile
-            if (existingAdmin.role !== UserRole.ADMIN) {
-                logger.info('🆙 Updating existing user to ADMIN role...');
-                await prisma.user.update({
-                    where: { email: adminEmail },
-                    data: { role: UserRole.ADMIN, isVerified: true }
-                });
-                logger.info('✅ User role updated to ADMIN');
-            }
-
-            await prisma.volunteer.upsert({
-                where: { userId: existingAdmin.id },
-                update: {},
-                create: {
-                    userId: existingAdmin.id,
-                    isVerified: true,
-                    isAvailable: true
-                }
-            });
+            logger.info('✅ User role updated to ADMIN');
         }
     } catch (error) {
         logger.error('❌ Error ensuring admin user:', error);

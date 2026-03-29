@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { volunteerService, Incident, VolunteerStats } from '../../services/volunteer.service';
+import { authService } from '../../services/auth.service';
 import { VolunteerBottomNav } from './VolunteerBottomNav';
 
 export function VolunteerDashboard() {
@@ -82,6 +83,10 @@ export function VolunteerDashboard() {
             ));
 
             await volunteerService.acceptIncident(incident.id);
+            
+            // Sync local user role
+            authService.updateLocalUser({ role: 'VOLUNTEER' });
+
             alert('Incident accepted! Navigate to the location.');
             loadData();
             navigate(`/volunteer/incident/${incident.id}`);

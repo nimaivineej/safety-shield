@@ -26,21 +26,13 @@ async function main() {
 
     // Create admin user
     console.log('🔑 Creating admin user...');
-    const admin = await prisma.user.create({
+    await prisma.user.create({
         data: {
             email: 'safetyshield453@gmail.com',
             password: adminPassword,
             name: 'System Admin',
             role: UserRole.ADMIN,
             isVerified: true,
-        },
-    });
-
-    await prisma.volunteer.create({
-        data: {
-            userId: admin.id,
-            isVerified: true,
-            isAvailable: true,
         },
     });
 

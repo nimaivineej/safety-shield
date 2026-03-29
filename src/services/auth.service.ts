@@ -79,6 +79,17 @@ export const authService = {
         return userStr ? JSON.parse(userStr) : null;
     },
 
+    // Update local user data (e.g. after role change)
+    updateLocalUser(data: any) {
+        const currentUser = this.getCurrentUser();
+        if (currentUser) {
+            const updatedUser = { ...currentUser, ...data };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            return updatedUser;
+        }
+        return null;
+    },
+
     // Check if authenticated
     isAuthenticated() {
         return !!localStorage.getItem('accessToken');
