@@ -2,23 +2,20 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     MapPin,
-    AlertCircle,
     CheckCircle,
     Clock,
     Navigation,
     Users,
-    TrendingUp,
     Power,
 } from 'lucide-react';
 import { Button } from './ui/button';
-import { volunteerService, Incident, VolunteerStats } from '../../services/volunteer.service';
+import { volunteerService, Incident } from '../../services/volunteer.service';
 import { authService } from '../../services/auth.service';
 import { BottomNav } from './BottomNav';
 
 export function VolunteerDashboard() {
     const navigate = useNavigate();
     const [incidents, setIncidents] = useState<Incident[]>([]);
-    const [stats, setStats] = useState<VolunteerStats | null>(null);
     const [loading, setLoading] = useState(true);
     const [isAvailable, setIsAvailable] = useState(true);
     // selectedIncident removed — navigation handled by router
@@ -36,23 +33,16 @@ export function VolunteerDashboard() {
     const loadData = async () => {
         setLoading(true);
         try {
-            // Fetch incidents and stats separately so one failure doesn't block the other
+            // Fetch incidents
             const incidentsPromise = volunteerService.getNearbyIncidents(50);
-            const statsPromise = volunteerService.getVolunteerStats();
 
-            const results = await Promise.allSettled([incidentsPromise, statsPromise]);
+            const results = await Promise.allSettled([incidentsPromise]);
 
             if (results[0].status === 'fulfilled') {
                 const rawIncidents = results[0].value.data || [];
                 setIncidents(rawIncidents.filter((inc: any) => inc.status !== 'RESOLVED' && inc.status !== 'CLOSED'));
             } else {
                 console.error('Failed to load incidents:', results[0].reason);
-            }
-
-            if (results[1].status === 'fulfilled') {
-                setStats(results[1].value.data);
-            } else {
-                console.error('Failed to load stats (user might not have a volunteer profile yet):', results[1].reason);
             }
         } catch (error) {
             console.error('Unexpected error in loadData:', error);
@@ -180,48 +170,6 @@ export function VolunteerDashboard() {
                 </div>
             </div>
 
-            {/* Stats */}
-            {stats && (
-                <div className="max-w-7xl mx-auto px-4 py-6">
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="bg-white rounded-2xl p-4 shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                                    <AlertCircle className="w-6 h-6 text-blue-600" />
-                                </div>
-                                <div>
-                                    <p className="text-2xl font-bold text-gray-900">{stats.activeIncidents}</p>
-                                    <p className="text-sm text-gray-600">Active</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-white rounded-2xl p-4 shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                                    <CheckCircle className="w-6 h-6 text-green-600" />
-                                </div>
-                                <div>
-                                    <p className="text-2xl font-bold text-gray-900">{stats.completedIncidents}</p>
-                                    <p className="text-sm text-gray-600">Completed</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-white rounded-2xl p-4 shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                                    <TrendingUp className="w-6 h-6 text-purple-600" />
-                                </div>
-                                <div>
-                                    <p className="text-2xl font-bold text-gray-900">{stats.totalIncidents}</p>
-                                    <p className="text-sm text-gray-600">Total</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* Incidents List */}
             <div className="max-w-7xl mx-auto px-4 pb-6">

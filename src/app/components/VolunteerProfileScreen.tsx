@@ -23,7 +23,6 @@ import { volunteerService } from '../../services/volunteer.service';
 export function VolunteerProfileScreen() {
     const navigate = useNavigate();
     const [user, setUser] = useState<any>(null);
-    const [stats, setStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -34,11 +33,7 @@ export function VolunteerProfileScreen() {
         }
         setUser(currentUser);
 
-        // Load volunteer stats
-        volunteerService.getVolunteerStats()
-            .then((res) => setStats(res.data || res))
-            .catch(() => setStats(null))
-            .finally(() => setLoading(false));
+        setLoading(false);
     }, [navigate]);
 
     const handleLogout = () => {
@@ -82,22 +77,6 @@ export function VolunteerProfileScreen() {
 
             <div className="px-5 pt-5 space-y-4">
 
-                {/* ── Stats Row ── */}
-                {!loading && stats && (
-                    <div className="grid grid-cols-3 gap-3">
-                        {[
-                            { icon: CheckCircle, label: 'Completed', value: stats.completedIncidents ?? 0, color: 'text-green-600', bg: 'bg-green-50' },
-                            { icon: Star, label: 'Rating', value: stats.rating ? `${stats.rating.toFixed(1)}★` : 'N/A', color: 'text-amber-500', bg: 'bg-amber-50' },
-                            { icon: Shield, label: 'Active', value: stats.activeIncidents ?? 0, color: 'text-teal-600', bg: 'bg-teal-50' },
-                        ].map(({ icon: Icon, label, value, color, bg }) => (
-                            <div key={label} className={`${bg} rounded-2xl p-3 text-center`}>
-                                <Icon className={`w-6 h-6 ${color} mx-auto mb-1`} />
-                                <p className="text-lg font-bold text-gray-900">{value}</p>
-                                <p className="text-xs text-gray-500">{label}</p>
-                            </div>
-                        ))}
-                    </div>
-                )}
 
                 {/* ── Personal Information ── */}
                 <div className="bg-white rounded-3xl shadow-sm p-5 space-y-3">

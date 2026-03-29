@@ -142,27 +142,6 @@ export function VolunteerScreen() {
       </div>
 
       <div className="p-6">
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="bg-white rounded-2xl p-4 shadow-md text-center">
-            <div className="text-2xl font-bold text-purple-600">
-              {incidents.filter(i => i.status === 'PENDING').length}
-            </div>
-            <div className="text-xs text-gray-600 mt-1">Pending</div>
-          </div>
-          <div className="bg-white rounded-2xl p-4 shadow-md text-center">
-            <div className="text-2xl font-bold text-blue-600">
-              {incidents.filter(i => i.status === 'ACCEPTED' || i.status === 'EN_ROUTE' || i.status === 'INVESTIGATING').length}
-            </div>
-            <div className="text-xs text-gray-600 mt-1">Active</div>
-          </div>
-          <div className="bg-white rounded-2xl p-4 shadow-md text-center">
-            <div className="text-2xl font-bold text-green-600">
-              {incidents.filter(i => i.status === 'RESOLVED').length}
-            </div>
-            <div className="text-xs text-gray-600 mt-1">Resolved</div>
-          </div>
-        </div>
 
         {/* Loading State */}
         {loading && (
