@@ -2,12 +2,23 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Bell, Volume2, Vibrate, AlertCircle, Users, FileText, ChevronRight } from 'lucide-react';
 import { BottomNav } from './BottomNav';
+import { authService } from '../../services/auth.service';
 import { settingsService } from '../../services/settings.service';
 
 export function NotificationsScreen() {
   const navigate = useNavigate();
 
   const [settings, setSettings] = useState(settingsService.getSettings());
+  const user = authService.getCurrentUser();
+  const isVolunteer = user?.role === 'VOLUNTEER';
+  const backPath = isVolunteer ? '/volunteer-profile' : '/profile';
+  
+  // Theme constants
+  const primaryGradient = isVolunteer ? 'from-green-600 to-teal-500' : 'from-purple-600 to-blue-500';
+  const primaryColor = isVolunteer ? 'text-green-600' : 'text-purple-600';
+  const primaryBg = isVolunteer ? 'bg-green-100' : 'bg-purple-100';
+  const toggleActiveBg = isVolunteer ? 'bg-green-600' : 'bg-purple-600';
+  const screenBg = isVolunteer ? 'from-green-50 via-white to-teal-50' : 'from-purple-50 via-white to-blue-50';
 
   useEffect(() => {
     settingsService.syncWithServer().then(setSettings);
@@ -25,7 +36,7 @@ export function NotificationsScreen() {
       type="button"
       onClick={onChange}
       className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
-        value ? 'bg-purple-600' : 'bg-gray-200'
+        value ? toggleActiveBg : 'bg-gray-200'
       }`}
     >
       <span
@@ -41,8 +52,8 @@ export function NotificationsScreen() {
     label,
     sub,
     settingKey,
-    color = 'text-purple-600',
-    bg = 'bg-purple-100',
+    color,
+    bg,
   }: {
     icon: any;
     label: string;
@@ -52,8 +63,8 @@ export function NotificationsScreen() {
     bg?: string;
   }) => (
     <div className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors">
-      <div className={`w-10 h-10 ${bg} rounded-xl flex items-center justify-center flex-shrink-0`}>
-        <Icon className={`w-5 h-5 ${color}`} />
+      <div className={`w-10 h-10 ${bg || primaryBg} rounded-xl flex items-center justify-center flex-shrink-0`}>
+        <Icon className={`w-5 h-5 ${color || primaryColor}`} />
       </div>
       <div className="flex-1 text-left">
         <p className="font-semibold text-gray-900">{label}</p>
@@ -64,11 +75,11 @@ export function NotificationsScreen() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 pb-20">
-      <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-6">
+    <div className={`min-h-screen bg-gradient-to-br ${screenBg} pb-20`}>
+      <div className={`bg-gradient-to-r ${primaryGradient} text-white p-6`}>
         <div className="flex items-center gap-4 mb-2">
           <button
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate(backPath)}
             className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30"
           >
             <ArrowLeft className="w-6 h-6" />
@@ -85,11 +96,11 @@ export function NotificationsScreen() {
         <div className="bg-white rounded-3xl shadow-md overflow-hidden">
           <div className="p-4 border-b border-gray-100">
             <h2 className="font-bold text-gray-900 flex items-center gap-2">
-              <Bell className="w-5 h-5 text-purple-600" /> Alert Types
+              <Bell className={`w-5 h-5 ${primaryColor}`} /> Alert Types
             </h2>
           </div>
           <Row icon={AlertCircle} label="SOS Alerts" sub="Receive SOS emergency notifications" settingKey="sosAlerts" color="text-red-600" bg="bg-red-100" />
-          <Row icon={FileText} label="Incident Updates" sub="Updates on reported incidents" settingKey="incidentUpdates" />
+          <Row icon={FileText} label="Incident Updates" sub="Updates on reported incidents" settingKey="incidentUpdates" color={isVolunteer ? 'text-green-600' : 'text-purple-600'} bg={isVolunteer ? 'bg-green-100' : 'bg-purple-100'} />
           <Row icon={Users} label="Volunteer Nearby" sub="When a volunteer is near you" settingKey="volunteerNearby" color="text-green-600" bg="bg-green-100" />
         </div>
 
@@ -115,8 +126,8 @@ export function NotificationsScreen() {
           <Row icon={Bell} label="SMS Alerts" sub="Receive alerts via SMS" settingKey="smsAlerts" color="text-pink-600" bg="bg-pink-100" />
         </div>
 
-        <div className="bg-purple-50 rounded-2xl p-4 text-center">
-          <p className="text-sm text-purple-700">Settings are saved automatically</p>
+        <div className={`${isVolunteer ? 'bg-green-50' : 'bg-purple-50'} rounded-2xl p-4 text-center`}>
+          <p className={`text-sm ${isVolunteer ? 'text-green-700' : 'text-purple-700'}`}>Settings are saved automatically</p>
         </div>
       </div>
 

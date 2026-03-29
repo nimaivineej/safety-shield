@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Lock, Eye, EyeOff, Shield, Trash2, Key } from 'lucide-react';
+import { authService } from '../../services/auth.service';
 import { BottomNav } from './BottomNav';
 import { Button } from './ui/button';
 import { settingsService } from '../../services/settings.service';
@@ -10,6 +11,16 @@ export function PrivacySecurityScreen() {
   const [showPassword, setShowPassword] = useState(false);
   
   const [settings, setSettings] = useState(settingsService.getSettings());
+  const user = authService.getCurrentUser();
+  const isVolunteer = user?.role === 'VOLUNTEER';
+  const backPath = isVolunteer ? '/volunteer-profile' : '/profile';
+
+  // Theme constants
+  const primaryGradient = isVolunteer ? 'from-green-600 to-teal-500' : 'from-purple-600 to-blue-500';
+  const toggleActiveBg = isVolunteer ? 'bg-green-600' : 'bg-purple-600';
+  const screenBg = isVolunteer ? 'from-green-50 via-white to-teal-50' : 'from-purple-50 via-white to-blue-50';
+  const primaryColor = isVolunteer ? 'text-green-600' : 'text-purple-600';
+  const primaryBg = isVolunteer ? 'bg-green-100' : 'bg-purple-100';
 
   const toggle = (key: keyof typeof settings) => {
     const newVal = !settings[key as keyof typeof settings];
@@ -22,7 +33,7 @@ export function PrivacySecurityScreen() {
       type="button"
       onClick={onChange}
       className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
-        value ? 'bg-purple-600' : 'bg-gray-200'
+        value ? toggleActiveBg : 'bg-gray-200'
       }`}
     >
       <span
@@ -34,18 +45,18 @@ export function PrivacySecurityScreen() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 pb-20">
-      <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-6">
+    <div className={`min-h-screen bg-gradient-to-br ${screenBg} pb-20`}>
+      <div className={`bg-gradient-to-r ${primaryGradient} text-white p-6`}>
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate(backPath)}
             className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30"
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div>
             <h1 className="text-2xl font-bold">Privacy & Security</h1>
-            <p className="text-purple-100">Control your data and account</p>
+            <p className={`${isVolunteer ? 'text-green-50' : 'text-purple-100'}`}>Control your data and account</p>
           </div>
         </div>
       </div>
@@ -55,12 +66,12 @@ export function PrivacySecurityScreen() {
         <div className="bg-white rounded-3xl shadow-md overflow-hidden">
           <div className="p-4 border-b border-gray-100">
             <h2 className="font-bold text-gray-900 flex items-center gap-2">
-              <Eye className="w-5 h-5 text-purple-600" /> Privacy
+              <Eye className={`w-5 h-5 ${primaryColor}`} /> Privacy
             </h2>
           </div>
           <div className="flex items-center gap-4 p-4">
-            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-              <Shield className="w-5 h-5 text-purple-600" />
+            <div className={`w-10 h-10 ${primaryBg} rounded-xl flex items-center justify-center`}>
+              <Shield className={`w-5 h-5 ${primaryColor}`} />
             </div>
             <div className="flex-1">
               <p className="font-semibold text-gray-900">Location Sharing</p>

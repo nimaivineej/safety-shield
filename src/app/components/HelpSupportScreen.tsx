@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, HelpCircle, MessageCircle, Phone, Mail, ChevronDown, ChevronUp, ExternalLink, Loader2 } from 'lucide-react';
 import { BottomNav } from './BottomNav';
+import { authService } from '../../services/auth.service';
 import { supportService } from '../../services/support.service';
 
 const faqs = [
@@ -33,6 +34,17 @@ const faqs = [
 
 export function HelpSupportScreen() {
   const navigate = useNavigate();
+  const user = authService.getCurrentUser();
+  const isVolunteer = user?.role === 'VOLUNTEER';
+  const backPath = isVolunteer ? '/volunteer-profile' : '/profile';
+  
+  // Theme constants
+  const primaryGradient = isVolunteer ? 'from-green-600 to-teal-500' : 'from-purple-600 to-blue-500';
+  const primaryColor = isVolunteer ? 'text-green-600' : 'text-purple-600';
+  const primaryBg = isVolunteer ? 'bg-green-100' : 'bg-purple-100';
+  const primaryButton = isVolunteer ? 'from-green-600 to-teal-500 hover:from-green-700 hover:to-teal-600' : 'from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600';
+  const screenBg = isVolunteer ? 'from-green-50 via-white to-teal-50' : 'from-purple-50 via-white to-blue-50';
+
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
@@ -55,10 +67,10 @@ export function HelpSupportScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 pb-20">
-      <div className="bg-gradient-to-r from-purple-600 to-blue-500 text-white p-6">
+    <div className={`min-h-screen bg-gradient-to-br ${screenBg} pb-20`}>
+      <div className={`bg-gradient-to-r ${primaryGradient} text-white p-6`}>
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/profile')} className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30">
+          <button onClick={() => navigate(backPath)} className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30">
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div>
@@ -91,7 +103,7 @@ export function HelpSupportScreen() {
         <div className="bg-white rounded-3xl shadow-md overflow-hidden">
           <div className="p-4 border-b border-gray-100">
             <h2 className="font-bold text-gray-900 flex items-center gap-2">
-              <HelpCircle className="w-5 h-5 text-purple-600" /> Frequently Asked Questions
+              <HelpCircle className={`w-5 h-5 ${primaryColor}`} /> Frequently Asked Questions
             </h2>
           </div>
           {faqs.map((faq, i) => (
@@ -101,10 +113,10 @@ export function HelpSupportScreen() {
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
               >
                 <span className="font-medium text-gray-900 pr-4">{faq.q}</span>
-                {openFaq === i ? <ChevronUp className="w-5 h-5 text-purple-500 flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />}
+                {openFaq === i ? <ChevronUp className={`w-5 h-5 ${isVolunteer ? 'text-green-500' : 'text-purple-500'} flex-shrink-0`} /> : <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />}
               </button>
               {openFaq === i && (
-                <div className="px-4 pb-4 text-sm text-gray-600 leading-relaxed bg-purple-50 border-t border-purple-100">
+                <div className={`px-4 pb-4 text-sm text-gray-600 leading-relaxed ${isVolunteer ? 'bg-green-50 border-green-100' : 'bg-purple-50 border-purple-100'} border-t`}>
                   <p className="pt-3">{faq.a}</p>
                 </div>
               )}
@@ -115,7 +127,7 @@ export function HelpSupportScreen() {
         {/* Contact Form */}
         <div className="bg-white rounded-3xl shadow-md p-5">
           <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <MessageCircle className="w-5 h-5 text-purple-600" /> Send us a message
+            <MessageCircle className={`w-5 h-5 ${primaryColor}`} /> Send us a message
           </h2>
           {sent ? (
             <div className="text-center py-6">
@@ -132,12 +144,12 @@ export function HelpSupportScreen() {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Describe your issue or question..."
                 rows={4}
-                className="w-full p-3 rounded-2xl border border-gray-200 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none text-sm"
+                className={`w-full p-3 rounded-2xl border border-gray-200 focus:${isVolunteer ? 'border-green-400' : 'border-purple-400'} focus:outline-none focus:ring-2 focus:${isVolunteer ? 'ring-green-500/20' : 'ring-purple-500/20'} resize-none text-sm`}
               />
               <button
                 onClick={handleSend}
                 disabled={!message.trim() || isSending}
-                className="w-full mt-3 h-12 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 disabled:opacity-50 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 transition-all"
+                className={`w-full mt-3 h-12 bg-gradient-to-r ${primaryButton} disabled:opacity-50 text-white font-semibold rounded-2xl flex items-center justify-center gap-2 transition-all`}
               >
                 {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />} 
                 {isSending ? 'Sending...' : 'Send Message'}
@@ -147,9 +159,9 @@ export function HelpSupportScreen() {
         </div>
 
         {/* App Version */}
-        <div className="bg-purple-50 rounded-2xl p-4 text-center">
-          <p className="text-sm text-purple-900 font-medium">SafetyShield v1.0.0</p>
-          <p className="text-xs text-purple-600 mt-1">Your Safety, Our Priority</p>
+        <div className={`${isVolunteer ? 'bg-green-50' : 'bg-purple-50'} rounded-2xl p-4 text-center`}>
+          <p className={`text-sm ${isVolunteer ? 'text-green-900 font-semibold' : 'text-purple-900 font-medium'}`}>SafetyShield v1.0.0</p>
+          <p className={`${isVolunteer ? 'text-green-600' : 'text-purple-600'} text-xs mt-1`}>Your Safety, Our Priority</p>
         </div>
       </div>
 
