@@ -47,7 +47,12 @@ api.interceptors.response.use(
 
                 const response = await axios.post(
                     `${API_CONFIG.BASE_URL}/auth/refresh`,
-                    { refreshToken }
+                    { refreshToken },
+                    {
+                        headers: {
+                            'ngrok-skip-browser-warning': 'true'
+                        }
+                    }
                 );
 
                 const { accessToken } = response.data.data;
